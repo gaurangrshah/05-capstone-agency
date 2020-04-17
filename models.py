@@ -6,16 +6,18 @@ import json
 
 database_name = "casting"
 
-heroku_db = "postgres://domxhljotpyuck:046e562a3389dd0888da6cc19cc4efcc20640f94f566aa0c8b262f0296b22008@ec2-34-200-116-132.compute-1.amazonaws.com:5432/d4ik1oq9u89jsb"
-# database_path = database_url
+heroku_db = 'postgres://domxhljotpyuck:046e562a3389dd0888da6cc19cc4efcc20640f94f566aa0c8b262f0296b22008@ec2-34-200-116-132.compute-1.amazonaws.com:5432/d4ik1oq9u89jsb'
 
-local_db = "postgres://{}:{}@{}/{}".format(
+local_db = 'postgres://{}:{}@{}/{}'.format(
     'postgres', 'bunty', 'localhost:5432', database_name)
 
 # if os.environ['DATABASE_URL']:
 #     db_from_vars = os.environ['DATABASE_URL']
 
-database_path = local_db
+# database_path = local_db
+# database_path = os.environ['DATABASE_URL']
+database_path = 'postgres://{}:{}@{}/{}'.format(
+    'postgres', 'bunty', 'localhost:5432', database_name)
 
 
 db = SQLAlchemy()
@@ -71,7 +73,7 @@ class Movie(db.Model):
 
     id = Column(db.Integer, primary_key=True)
     title = Column(db.String)
-    release_date = Column(db.String)
+    release_date = Column(db.String)  # convert to datetime
 
     def __init__(self, name, release_date):
         self.title = title

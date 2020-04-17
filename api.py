@@ -1,19 +1,15 @@
-import os
-from flask import Flask, request, jsonify, abort
-from sqlalchemy import exc
+from flask import Blueprint, request, jsonify, abort
 import json
-from flask_cors import CORS
-
 from models import db_drop_and_create_all, setup_db, db, Actor, Movie  # 🚨 IMPORT MODELS
 from auth import AuthError, requires_auth  # ✅ IMPORT AUTH
-from app import app  # 🚨 IMPORT APP
+casting_blueprint = Blueprint('gsprod-api', __name__)
 
 '''
 @TODO uncomment the following line to initialize the datbase
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 '''
-db_drop_and_create_all()
+# db_drop_and_create_all()
 
 print(db)
 
@@ -27,7 +23,7 @@ print(db)
     returns status code 200 and json {"success": True, "item": items} where items is the list of movies or actors
         or appropriate status code indicating reason for failure
 '''
-@app.route('/movies', methods=['GET'])
+@casting_blueprint.route('/movies', methods=['GET'])
 def get_movies():
     """Returns a list of objects with a short-form representation of movies or actors"""
     all_movies = Movie.query.all()
@@ -35,15 +31,15 @@ def get_movies():
     if all_movies is None:
         abort(404, 'There are no movies available')
 
-    short_movie = [movie.short() for movie in all_movies]
+    movie_titles = [movie.title for movie in all_movies]
 
     return jsonify({
         'success': True,
-        'movies': short_movie
+        'movies': movie_titles
     }), 200
 
 
-@app.route('/actors', methods=['GET'])
+@casting_blueprint.route('/actors', methods=['GET'])
 def get_actors():
     """Returns a list of objects with a short-form representation of actors"""
     all_actors = Actor.query.all()
@@ -51,11 +47,11 @@ def get_actors():
     if all_actors is None:
         abort(404, 'There are no actors available')
 
-    short_actor = [actor.short() for actor in all_actors]
+    actor_names = [actor.name for actor in all_actors]
 
     return jsonify({
         'success': True,
-        'actors': short_actor
+        'actors': actor_names
     }), 200
 
 # '''
@@ -192,7 +188,7 @@ def get_actors():
 '''
 Example error handling for unprocessable entity
 '''
-@app.errorhandler(422)
+@casting_blueprint.errorhandler(422)
 def unprocessable(error):
     return jsonify({
         "success": False,
@@ -202,7 +198,7 @@ def unprocessable(error):
 
 
 '''
-@TODO implement error handlers using the @app.errorhandler(error) decorator
+@TODO implement error handlers using the @casting_blueprint.errorhandler(error) decorator
     each error handler should return (with approprate messages):
              jsonify({
                     "success": False,
@@ -211,7 +207,7 @@ def unprocessable(error):
                     }), 404
 
 '''
-@app.errorhandler(400)
+@casting_blueprint.errorhandler(400)
 def bad_request(error):
     return jsonify({
         'success': False,
@@ -220,7 +216,7 @@ def bad_request(error):
     }), 400
 
 
-@app.errorhandler(405)
+@casting_blueprint.errorhandler(405)
 def method_not_allowed(error):
     return jsonify({
         'success': False,
@@ -229,7 +225,7 @@ def method_not_allowed(error):
     }), 405
 
 
-@app.errorhandler(500)
+@casting_blueprint.errorhandler(500)
 def internal_sever_error(error):
     return jsonify({
         'success': False,
@@ -238,7 +234,7 @@ def internal_sever_error(error):
     }), 500
 
 
-@app.errorhandler(401)
+@casting_blueprint.errorhandler(401)
 def permission_error(error):
     return jsonify({
         "success": False,
@@ -253,7 +249,7 @@ def permission_error(error):
 '''
 
 
-@app.errorhandler(404)
+@casting_blueprint.errorhandler(404)
 def not_found(error):
     return jsonify({
         'success': False,
@@ -268,10 +264,18 @@ def not_found(error):
 '''
 
 
-@app.errorhandler(AuthError)
-def invalid_claims(error):
+# @casting_blueprint.errorhandler(AuthError)
+# def invalid_claims(error):
+#     return jsonify({
+#         'success': False,
+#         'error': 401,
+#         'message': error.__dict__
+#     })
+
+
+@casting_blueprint.errorhandler(AuthError)
+def handle_auth_error(exception):
     return jsonify({
-        "success": False,
-        "error": 401,
-        "message": error.__dict__
+        'error': exception.error,
+        'status': exception.status_code
     })

@@ -18,7 +18,7 @@ def create_app(test_config=None):
     app.register_error_handler(401, permission_error)
     app.register_error_handler(404, not_found)
     app.register_error_handler(401, handle_auth_error)
-    # app.register_error_handler(401, invalid_claims)
+
     setup_db(app)
     cors = CORS(app, resources={r"/api*": {"origins": "*"}})
 

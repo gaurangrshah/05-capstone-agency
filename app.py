@@ -1,6 +1,6 @@
 import os
 from flask import Flask
-from models import setup_db
+from models import setup_db, db_drop_and_create_all
 from flask_cors import CORS
 
 
@@ -16,6 +16,8 @@ def create_app(test_config=None):
         greeting = "Hello"
         if excited == 'true':
             greeting = greeting + "!!!!!"
+        else:
+            greeting = greeting + "?????"
         return greeting
 
     @app.route('/coolkids')

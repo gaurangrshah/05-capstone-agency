@@ -34,4 +34,4 @@ if __name__ == '__main__':
     app.run()
 
 # starter:
-# https://github.com/udacity/FSND/tree/master/projects/capstone/heroku_sample/starter
+# https://github.com/udacity/FSND/tree/master/projects/capstone/heroku_sample/starte

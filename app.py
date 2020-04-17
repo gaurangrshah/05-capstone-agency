@@ -1,15 +1,16 @@
 import os
 from flask import Flask
-from models import setup_db, db_drop_and_create_all
 from flask_cors import CORS
+from config import db_config
+from models import setup_db, db_drop_and_create_all
 from api import (
     casting_blueprint, unprocessable, bad_request, method_not_allowed, internal_sever_error, permission_error, not_found, handle_auth_error
 )
 
 
 def create_app(test_config=None):
-
     app = Flask(__name__)
+
     app.register_blueprint(casting_blueprint, url_prefix='/api')
     app.register_error_handler(422, unprocessable)
     app.register_error_handler(400, bad_request)
@@ -18,6 +19,9 @@ def create_app(test_config=None):
     app.register_error_handler(401, permission_error)
     app.register_error_handler(404, not_found)
     app.register_error_handler(401, handle_auth_error)
+
+    print(db_config)
+    app.config.from_object(db_config)
 
     setup_db(app)
     cors = CORS(app, resources={r"/api*": {"origins": "*"}})

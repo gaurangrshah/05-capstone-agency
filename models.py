@@ -1,24 +1,5 @@
-import os
-from sqlalchemy import Column, String, create_engine
 from flask_sqlalchemy import SQLAlchemy
-import json
-
-
-# database_name = "casting"
-
-# heroku_db = 'postgres://domxhljotpyuck:046e562a3389dd0888da6cc19cc4efcc20640f94f566aa0c8b262f0296b22008@ec2-34-200-116-132.compute-1.amazonaws.com:5432/d4ik1oq9u89jsb'
-
-# formatted_local_db = 'postgres://{}:{}@{}/{}'.format(
-#     'postgres', 'bunty', 'localhost:5432', database_name)
-
-# local_db = 'postgres://postgres:bunty@localhost:5432/casting'
-
-# # database_path = os.getenv('DATABASE_URL')
-
-# database_path = os.environ['DATABASE_URL']
-
-
-# print('🚩DATABASE_PATH', database_path)
+import dateutil.parser
 
 db = SQLAlchemy()
 
@@ -28,18 +9,16 @@ setup_db(app)
 '''
 
 
-def setup_db(app):
-    # def setup_db(app, database_path=database_path):
-    # app.config["SQLALCHEMY_DATABASE_URI"] = database_path
-    # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    db.app = app
-    db.init_app(app)
-    db.create_all()
-
-
 def db_drop_and_create_all():
     db.drop_all()
     db.create_all()
+
+
+def setup_db(app):
+    db.app = app
+    db.init_app(app)
+    # db.create_all()
+    db_drop_and_create_all()
 
 
 '''
@@ -47,14 +26,20 @@ Person
 Have title and release year
 '''
 
+cast = db.Table(
+    'cast',
+    db.Column('actor_id', db.Integer, db.ForeignKey('actors.id')),
+    db.Column('movie_id', db.Integer, db.ForeignKey('movies.id'))
+)
+
 
 class Actor(db.Model):
     __tablename__ = 'actors'
 
-    id = Column(db.Integer, primary_key=True)
-    name = Column(db.String)
-    age = Column(db.Integer)
-    gender = Column(db.String)  # 🚧 create ENUM
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    age = db.Column(db.Integer)
+    gender = db.Column(db.String(1))  # 🚧 create ENUM
 
     def __init__(self, name, age, gender):
         self.name = name
@@ -68,13 +53,34 @@ class Actor(db.Model):
             'age': self.age,
             'gender': self.gender}
 
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    @staticmethod
+    def update():
+        db.session.commit()
+
+
+def __repr__(self):
+    return f'<Movie id: "{self.id}", name: "{self.name}"'
+
 
 class Movie(db.Model):
     __tablename__ = 'movies'
 
-    id = Column(db.Integer, primary_key=True)
-    title = Column(db.String)
-    release_date = Column(db.String)  # convert to datetime
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    release_date = db.Column(db.DateTime)  # convert to datetime
+    actors = db.relationship(
+        'Actor',
+        secondary=cast,
+        backref=db.backref('movies')
+    )
 
     def __init__(self, name, release_date):
         self.title = title
@@ -85,3 +91,18 @@ class Movie(db.Model):
             'id': self.id,
             'title': self.title,
             'release_date': self.release_date}
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    @staticmethod
+    def update():
+        db.session.commit()
+
+    def __repr__(self):
+        return f'<Movie id: "{self.id}", title: "{self.title}"'

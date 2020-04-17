@@ -19,6 +19,7 @@ database_path = os.getenv('DATABASE_URL')
 # database_path = 'postgres://{}:{}@{}/{}'.format(
 #     'postgres', 'bunty', 'localhost:5432', database_name)
 
+print('🚩DATABASE_PATH', database_path)
 
 db = SQLAlchemy()
 

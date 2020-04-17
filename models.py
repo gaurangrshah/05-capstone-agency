@@ -17,8 +17,8 @@ def db_drop_and_create_all():
 def setup_db(app):
     db.app = app
     db.init_app(app)
-    # db.create_all()
-    db_drop_and_create_all()
+    db.create_all()
+    # db_drop_and_create_all()
 
 
 '''

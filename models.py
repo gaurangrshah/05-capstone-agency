@@ -15,7 +15,7 @@ local_db = 'postgres://{}:{}@{}/{}'.format(
 #     db_from_vars = os.environ['DATABASE_URL']
 
 # database_path = local_db
-database_path = os.environ['DATABASE_URL']
+database_path = os.getenv('DATABASE_URL')
 # database_path = 'postgres://{}:{}@{}/{}'.format(
 #     'postgres', 'bunty', 'localhost:5432', database_name)
 

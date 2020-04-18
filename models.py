@@ -32,7 +32,7 @@ cast = db.Table(
     db.Column('movie_id', db.Integer,
               db.ForeignKey('actors.id'), primary_key=True),
     db.Column('actor_id', db.Integer,
-              db.ForeignKey('actors.id'), primary_key=True),
+              db.ForeignKey('movies.id'), primary_key=True),
 )
 
 
@@ -46,17 +46,10 @@ class Actor(db.Model):
     cast = db.relationship('Movie', secondary=cast,
                            backref=db.backref('movies', lazy=True))
 
-    # def __init__(self, name, age, gender):
-    #     self.name = name
-    #     self.age = age
-    #     self.gender = gender
-
-    def format(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'age': self.age,
-            'gender': self.gender}
+    def __init__(self, name, age, gender):
+        self.name = name
+        self.age = age
+        self.gender = gender
 
     def insert(self):
         db.session.add(self)
@@ -70,8 +63,15 @@ class Actor(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    # def __repr__(self):
-    #     return f'<Actor id: "{self.id}", name: "{self.name}">'
+    def format(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'age': self.age,
+            'gender': self.gender}
+
+    def __repr__(self):
+        return f'<Actor id: "{self.id}", name: "{self.name}">'
 
 
 class Movie(db.Model):
@@ -87,14 +87,6 @@ class Movie(db.Model):
         self.title = title
         # self.release_date = release_date
 
-    def format(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            # 'release_date': self.release_date.strftime('%c')
-            'cast': [actor.format() for actor in self.cast]
-        }
-
     def insert(self):
         db.session.add(self)
         db.session.commit()
@@ -107,5 +99,12 @@ class Movie(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    # def __repr__(self):
-    #     return f'<Movie id: "{self.id}", title: "{self.title}">'
+    def format(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            # 'release_date': self.release_date.strftime('%c')
+        }
+
+    def __repr__(self):
+        return f'<Movie id: "{self.id}", title: "{self.title}, "cast": "{self.cast}">'

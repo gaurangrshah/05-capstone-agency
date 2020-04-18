@@ -21,20 +21,20 @@ def create_app(test_config=None):
     app.config.from_object('config.DBConfig')
     setup_db(app)
     migrate = Migrate(app, db)
-    cors = CORS(app)
-    # cors = CORS(app, resources={r"/api*": {"origins": "*"}})
+    # cors = CORS(app)
+    cors = CORS(app, resources={r"/api*": {"origins": "*"}})
 
-    # @app.after_request
-    # def after_request(response):
-    #     response.headers.add(
-    #         'Access-Control-Allow-Headers',
-    #         'Content-Type,Authorization,true'
-    #     )
-    #     response.headers.add(
-    #         'Access-Control-Allow-Methods',
-    #         'GET,PATCH,POST,DELETE,OPTIONS'
-    #     )
-    #     return response
+    @app.after_request
+    def after_request(response):
+        response.headers.add(
+            'Access-Control-Allow-Headers',
+            'Content-Type,Authorization,true'
+        )
+        response.headers.add(
+            'Access-Control-Allow-Methods',
+            'GET,PATCH,POST,DELETE,OPTIONS'
+        )
+        return response
 
     @app.route('/')
     def get_greeting():

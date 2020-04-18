@@ -46,15 +46,14 @@ def get_token_auth_header():
             'description': 'Authorization header is expected.'
         }, 401)
 
-    parts = auth.split()  # split auth into 2 parts
-    if parts[0].lower() != 'bearer':  # check for the word 'bearer'
+    parts = auth.split()
+    if parts[0].lower() != 'bearer':
         raise AuthError({
-            # if bearer is not in auth
             'code': 'invalid_header',
             'description': 'Authorization header must start with "Bearer".'
         }, 401)
 
-    elif len(parts) == 1:  # if split only produced a single item
+    elif len(parts) == 1:
         raise AuthError({
             # assumes token is not in header
             'code': 'invalid_header',

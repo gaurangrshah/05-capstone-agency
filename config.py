@@ -9,16 +9,20 @@ heroku_db = 'postgres://domxhljotpyuck:046e562a3389dd0888da6cc19cc4efcc20640f94f
 '''
 
 
-class db_config:
+class DBConfig:
     DEBUG = True
     SECRET_KEY = os.urandom(32)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
 
-    print('debug:', DEBUG, 'SECRET_KEY:', SECRET_KEY, 'SQLALCHEMY_TRACK_MODIFICATIONS:',
-          SQLALCHEMY_TRACK_MODIFICATIONS, 'SQLALCHEMY_DATABASE_URI:', SQLALCHEMY_DATABASE_URI)
+    def __repr__(self):
+        return f'<DBonfig DEBUG: "{self.DEBUG}", SECRET_KEY: "{self.SECRET_KEY}", SQLALCHEMY_TRACK_MODIFICATIONS: "{self.SQLALCHEMY_TRACK_MODIFICATIONS}", SQLALCHEMY_DATABASE_URI: "{self.SQLALCHEMY_DATABASE_URI}">'
 
-    # class auth0_config:
-    #     domain = os.environ['AUTH0_DOMAIN']
-    #     algorithms = os.environ['AUTH0_ALGORITHMS']
-    #     audience = os.environ['AUTH0_AUDIENCE']
+
+class Auth0Config:
+    domain = os.getenv('AUTH0_DOMAIN')
+    algorithms = os.getenv('AUTH0_ALGORITHMS')
+    audience = os.getenv('AUTH0_AUDIENCE')
+
+    def __repr__(self):
+        return f'<Auth0Config domain: "{domain}", algorithms: "{algorithms}", doman: "{audience}">'

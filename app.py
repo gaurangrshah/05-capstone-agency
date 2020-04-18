@@ -1,10 +1,10 @@
 import os
 from flask import Flask
 from flask_cors import CORS
-from config import db_config
-from models import setup_db, db_drop_and_create_all
-from api import (
-    casting_blueprint, unprocessable, bad_request, method_not_allowed, internal_sever_error, permission_error, not_found, handle_auth_error
+from flask_migrate import Migrate
+from models import db, setup_db, db_drop_and_create_all
+from api import (  # permission_error
+    casting_blueprint, unprocessable, bad_request, method_not_allowed, internal_sever_error, not_found
 )
 
 
@@ -16,27 +16,25 @@ def create_app(test_config=None):
     app.register_error_handler(400, bad_request)
     app.register_error_handler(405, method_not_allowed)
     app.register_error_handler(500, internal_sever_error)
-    app.register_error_handler(401, permission_error)
     app.register_error_handler(404, not_found)
-    app.register_error_handler(401, handle_auth_error)
-
-    print(db_config)
-    app.config.from_object(db_config)
-
+    # app.register_error_handler(401, permission_error)
+    app.config.from_object('config.DBConfig')
     setup_db(app)
-    cors = CORS(app, resources={r"/api*": {"origins": "*"}})
+    migrate = Migrate(app, db)
+    cors = CORS(app)
+    # cors = CORS(app, resources={r"/api*": {"origins": "*"}})
 
-    @app.after_request
-    def after_request(response):
-        response.headers.add(
-            'Access-Control-Allow-Headers',
-            'Content-Type,Authorization,true'
-        )
-        response.headers.add(
-            'Access-Control-Allow-Methods',
-            'GET,PATCH,POST,DELETE,OPTIONS'
-        )
-        return response
+    # @app.after_request
+    # def after_request(response):
+    #     response.headers.add(
+    #         'Access-Control-Allow-Headers',
+    #         'Content-Type,Authorization,true'
+    #     )
+    #     response.headers.add(
+    #         'Access-Control-Allow-Methods',
+    #         'GET,PATCH,POST,DELETE,OPTIONS'
+    #     )
+    #     return response
 
     @app.route('/')
     def get_greeting():
@@ -61,4 +59,4 @@ if __name__ == '__main__':
     app.run()
 
 # starter:
-# https://github.com/udacity/FSND/tree/master/projects/capstone/heroku_sample/starte
+# https://github.com/udacity/FSND/tree/master/projects/capstone/heroku_sample/starter

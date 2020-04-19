@@ -66,7 +66,7 @@ def get_token_auth_header():
 
     token = parts[1]  # return only the token from parts
     if token:
-        print('token exists')
+        print('✅ found token in header')
     return token
 
 
@@ -116,29 +116,29 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer='https://' + AUTH0_DOMAIN + '/'
             )
-            print('rsa key found')
+            print('✅ rsa key found')
             return payload
 
         except jwt.ExpiredSignatureError:
-            print('payload token_expired')
+            print('🚩 payload token_expired')
             raise AuthError({
                 'code': 'token_expired',
                 'description': 'Token expired.'
             }, 401)
 
         except jwt.JWTClaimsError:
-            print('payload invalid_claims')
+            print('🚩 payload invalid_claims')
             raise AuthError({
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
             }, 401)
         except Exception:
-            print('payload invalid_header')
+            print('🚩 payload invalid_header')
             raise AuthError({
                 'code': 'invalid_header',
                 'description': 'Unable to parse authentication token.'
             }, 400)
-    print('payload unable to find key')
+    print('🚩 payload unable to find key')
     raise AuthError({
         'code': 'invalid_header',
         'description': 'Unable to find the appropriate key.'
@@ -159,19 +159,18 @@ def verify_decode_jwt(token):
 
 
 def check_permissions(permission, payload):
-    # 🚧 checking permissions, invalid permissions still result in a 200 status
-    # status should be 401 not 200 if permissions are false
     """Checks for permission in JWT"""
     if 'permissions' not in payload:
         # look for permissions in payload
-        print("'permissions' not in payload")
+        print("❌ 'permissions' not in payload for:", permission)
         raise AuthError({
             'code': 'invalid_claims',
             'description': 'Permission not included in JWT.'
         }, 400)
     if permission not in payload['permissions']:
         # look for permission in payload properties
-        print("permission not in payload['permissions']")
+        print(
+            "❌ matching permission not found in payload['permissions'] for:", permission)
         raise AuthError({
             'code': 'unauthorized',
             'description': 'Permission not found.'
@@ -199,7 +198,7 @@ def requires_auth(permission=''):  # defaults permission to empty string
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             # check permissions
-            print('checking permission for', permission)
+            print('🧐 checking permission for', permission)
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
         return wrapper

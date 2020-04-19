@@ -35,7 +35,7 @@ def create_app(test_config=None):
             'Access-Control-Allow-Methods',
             'GET,PATCH,POST,DELETE,OPTIONS'
         )
-        print('response after_request', response)
+        print('✅ response after_request', response)
         return response
 
     @app.route('/')

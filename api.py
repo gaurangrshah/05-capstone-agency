@@ -15,7 +15,8 @@ casting_blueprint = Blueprint('gsprod-api', __name__)
         or appropriate status code indicating reason for failure
 '''
 @casting_blueprint.route('/movies', methods=['GET'])
-def get_movies():
+@requires_auth('get:movies')
+def get_movies(jwt):
     """Returns a list of objects with a short-form representation of movies or actors"""
     all_movies = Movie.query.all()
 
@@ -31,7 +32,8 @@ def get_movies():
 
 
 @casting_blueprint.route('/actors', methods=['GET'])
-def get_actors():
+@requires_auth('get:actors')
+def get_actors(jwt):
     """Returns a list of objects with a short-form representation of actors"""
     all_actors = Actor.query.all()
 
@@ -59,8 +61,11 @@ def get_actors():
 
 
 @casting_blueprint.route('/movies/<int:movie_id>', methods=['GET'])
-def get_movie(movie_id):
+@requires_auth('get:movies')
+def get_movie(jwt, movie_id):
+    print('getting movie for id:', movie_id)
     movie = Movie.query.get(movie_id)
+    print('found movie', movie.format())
     if movie:
         return jsonify({
             'success': True,
@@ -71,7 +76,8 @@ def get_movie(movie_id):
 
 
 @casting_blueprint.route('/actors/<int:actor_id>', methods=['GET'])
-def get_actor(actor_id):
+@requires_auth('get:actors')
+def get_actor(jwt, actor_id):
     actor = Actor.query.get(actor_id)
     if actor:
         return jsonify({
@@ -91,158 +97,161 @@ def get_actor(actor_id):
         or appropriate status code indicating reason for failure
 '''
 @casting_blueprint.route('/movies', methods=['POST'])
-# @requires_auth('post:movies')
-# def post_movie(jwt):
-def post_movie():
+@requires_auth('post:movies')
+def post_movie(jwt):
     """Create a new Movie with the POST method"""
     if request.method != 'POST':
         abort(405)
     data = request.get_json()
-    title = data['title']
-    # release_date = data['release_date']
-    print('title/release_date', title)  # release_date
-    if title:  # and release_date
-        movie = Movie(
-            title=title
-            # release_date=release_date
-        )
-        print('adding', movie)
-        try:
-            movie.insert()
-        except Exception as e:
-            print(e)
-            db.session.rollback()
-            abort(422)
-        finally:
-            return jsonify({
-                'success': True,
-                'movie': movie.format()
-            }), 200
-            db.session.close()
-
-    else:
-        abort(404)
+    movie = Movie(
+        title=data['title'],
+        year=data['year']
+    )
+    try:
+        movie.insert()
+    except Exception as e:
+        db.session.rollback()
+        abort(422)
+    finally:
+        return jsonify({
+            'success': True,
+            'movie': movie.format()
+        }), 200
+        db.session.close()
 
 
 @casting_blueprint.route('/actors', methods=['POST'])
-# @requires_auth('post:actors')
-# def post_movie(jwt):
-def post_actor():
+@requires_auth('post:actors')
+def post_actor(jwt):
     """Create a new Actor with the POST method"""
     if request.method != 'POST':
         abort(405)
     data = request.get_json()
-    name = data['name']
-    age = data['age']
-    gender = data['gender']
-    print('name/age/gender', name, age, gender)
-    if name and gender:
-        actor = Actor(
-            name=name,
-            age=age,
-            gender=gender
-        )
-        print('adding', actor)
-        try:
-            actor.insert()
-        except Exception as e:
-            print(e)
-            db.session.rollback()
-            abort(422)
-        finally:
-            return jsonify({
-                'success': True,
-                'actor': actor.format()
-            }), 200
-            db.session.close()
-
-    else:
-        abort(404)
+    actor = Actor(
+        name=data['name'],
+        age=data['age'],
+        gender=data['gender']
+    )
+    try:
+        actor.insert()
+    except Exception as e:
+        db.session.rollback()
+        abort(422)
+    finally:
+        return jsonify({
+            'success': True,
+            'actor': actor.format()
+        }), 200
+        db.session.close()
 
 
-# '''
-# @TODO implement endpoint
-#     GET /drinks-detail
-#         it should require the 'get:drinks-detail' permission
-#         it should contain the drink.long() data representation
-#     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
-#         or appropriate status code indicating reason for failure
-# '''
-# @app.route('/drinks-detail', methods=['GET'])
-# @requires_auth('get:drinks-detail')
-# def get_drinks_detail(jwt):
-#     """Returns a list of objects containing a long-form representation of Drinks """
-#     all_drinks = Drink.query.all()
-#     if all_drinks is None:
-#         abort(404, 'There are no drinks available')
-#     long_drink = [drink.long() for drink in all_drinks]
-#     return jsonify({
-#         'success': True,
-#         'drinks': long_drink
-#     }), 200
+'''
+@TODO implement endpoint
+    PATCH /movies/<id> | PATCH /actors/<id> |
+        where <id> is the existing model id
+        it should respond with a 404 error if <id> is not found
+        it should update the corresponding row for <id>
+        it should require the 'patch:items' permission
+        it should contain the item data representation
+    returns status code 200 and json {"success": True, "movie": item} where item an array containing only the updated item
+        or appropriate status code indicating reason for failure
+'''
+@casting_blueprint.route('/movies/<int:movie_id>', methods=['PATCH'])
+@requires_auth('patch:movies')
+def patch_movie(jwt, movie_id):
+    """Update a pre-existing Movie using the PATCH method"""
+    data = request.get_json()
+    movie = Movie.query.get(movie_id)
+    if movie is None:
+        abort(404, 'Movie not found')
+    try:
+        movie.title = data.get('title')
+        movie.year = data.get('year')
+        movie.update()
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
+        return jsonify({
+            'success': True,
+            'movies': [movie.format()]
+        }), 200
+        db.session.close()
 
 
-# '''
-# @TODO implement endpoint
-#     PATCH /drinks/<id>
-#         where <id> is the existing model id
-#         it should respond with a 404 error if <id> is not found
-#         it should update the corresponding row for <id>
-#         it should require the 'patch:drinks' permission
-#         it should contain the drink.long() data representation
-#     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
-#         or appropriate status code indicating reason for failure
-# '''
-# @app.route('/drinks/<int:drink_id>', methods=['PATCH'])
-# @requires_auth('patch:drinks')
-# def patch_drink(jwt, drink_id):
-#     """Update a pre-existing Drink using the PATCH method"""
-#     data = request.get_json()
-#     drink = Drink.query.get(drink_id)
-#     if drink is None:
-#         abort(404, 'Drink not found')
-#     try:
-#         drink.title = data.get('title')
-#         drink.recipe = data.get('recipe')
-#         drink.update()
-#     except Exception:
-#         db.session.rollback()
-#         abort(422)
-#     finally:
-#         return jsonify({
-#             'success': True,
-#             'drinks': [drink.long()]
-#         }), 200
-#         db.session.close()
+@casting_blueprint.route('/actors/<int:actor_id>', methods=['PATCH'])
+@requires_auth('patch:actors')
+def patch_actor(jwt, actor_id):
+    """Update a pre-existing Actor using the PATCH method"""
+    data = request.get_json()
+    actor = Actor.query.get(actor_id)
+    if actor is None:
+        abort(404, 'Actor not found')
+    try:
+        actor.title = data.get('title')
+        actor.name = data.get('name')
+        actor.age = data.get('age')
+        actor.gender = data.get('gender')
+        actor.update()
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
+        return jsonify({
+            'success': True,
+            'actors': [actor.format()]
+        }), 200
+        db.session.close()
 
-# '''
-# @TODO implement endpoint
-#     DELETE /drinks/<id>
-#         where <id> is the existing model id
-#         it should respond with a 404 error if <id> is not found
-#         it should delete the corresponding row for <id>
-#         it should require the 'delete:drinks' permission
-#     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
-#         or appropriate status code indicating reason for failure
-# '''
-# @app.route('/drinks/<int:drink_id>', methods=['DELETE'])
-# @requires_auth('delete:drinks')
-# def delete_drink(jwt, drink_id):
-#     """Delete an existing drink using the DELETE method"""
-#     drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
-#     if drink is None:
-#         abort(404, 'Drink not found.')
-#     try:
-#         drink.delete()
-#     except Exception:
-#         db.session.rollback()
-#         abort(422)
-#     finally:
-#         return jsonify({
-#             'success': True,
-#             'delete': drink_id
-#         }), 200
-#         db.session.close()
+
+'''
+@TODO implement endpoint
+    DELETE /movies/<id> | DELETE /actors/<id>
+        where <id> is the existing model id
+        it should respond with a 404 error if <id> is not found
+        it should delete the corresponding row for <id>
+        it should require the 'delete:item' permission
+    returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
+        or appropriate status code indicating reason for failure
+'''
+@casting_blueprint.route('/movies/<int:movie_id>', methods=['DELETE'])
+@requires_auth('delete:movies')
+def delete_movie(jwt, movie_id):
+    """Delete an existing movie using the DELETE method"""
+    movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
+    if movie is None:
+        abort(404, 'Movie not found.')
+    try:
+        movie.delete()
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
+        return jsonify({
+            'success': True,
+            'delete': movie_id
+        }), 200
+        db.session.close()
+
+
+@casting_blueprint.route('/actors/<int:actor_id>', methods=['DELETE'])
+@requires_auth('delete:actors')
+def delete_actor(jwt, actor_id):
+    """Delete an existing actor using the DELETE method"""
+    actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
+    if actor is None:
+        abort(404, 'Actor not found.')
+    try:
+        actor.delete()
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
+        return jsonify({
+            'success': True,
+            'delete': actor_id
+        }), 200
+        db.session.close()
 
 
 # Error Handling
@@ -316,9 +325,37 @@ def not_found(error):
 '''
 
 
-# @casting_blueprint.errorhandler(AuthError)
-# def permission_error(exception):
-#     return jsonify({
-#         'error': exception.error,
-#         'status': exception.status_code
-#     })
+@casting_blueprint.errorhandler(AuthError)
+def permission_error(exception):
+    return jsonify({
+        'error': exception.error,
+        'status': exception.status_code
+    })
+
+
+@casting_blueprint.route('/seed')
+def add_dummy_data():
+    """ Seed Database """
+    db_drop_and_create_all()
+    actor1 = Actor(name="Sam Jones", age=25, gender='m')
+    actor2 = Actor(name="Cynthia Jones", age=22, gender='f')
+    actor3 = Actor(name="Vanna White", age=32, gender='f')
+
+    movie1 = Movie(title="The Movie", year=2015)
+    movie2 = Movie(title="The Movie 2", year=2016)
+    movie3 = Movie(title="The Movie 3", year=2017)
+
+    actor1.insert()
+    actor2.insert()
+    actor3.insert()
+    movie1.insert()
+    movie2.insert()
+    movie3.insert()
+
+    db.session.commit()
+    db.session.close()
+
+    return jsonify({
+        "success": 200,
+        "message": "db populated successfully"
+    })

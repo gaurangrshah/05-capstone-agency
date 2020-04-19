@@ -1,3 +1,4 @@
+import os
 import json
 from flask import request, _request_ctx_stack, abort
 # ✅ install the following packages as needed
@@ -5,10 +6,11 @@ from jose import jwt
 # 🚧 installed by default with python:
 from functools import wraps
 from urllib.request import urlopen
+from config import Auth0Config
 
-AUTH0_DOMAIN = 'gs-prod.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'casting'
+AUTH0_DOMAIN = Auth0Config.domain
+ALGORITHMS = Auth0Config.algorithms
+API_AUDIENCE = Auth0Config.audience
 
 
 # AuthError Exception
@@ -39,6 +41,7 @@ class AuthError(Exception):
 def get_token_auth_header():
     """Grab Access Token from the Authorization Header in request"""
     auth = request.headers.get('Authorization', None)
+    data = request.get_json()
     print('check token')
     if not auth:  # ensures auth has a truthy value
         raise AuthError({

@@ -1,10 +1,10 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
-from models import db, setup_db, db_drop_and_create_all
-from api import (  # permission_error
-    casting_blueprint, unprocessable, bad_request, method_not_allowed, internal_sever_error, not_found
+from models import db, setup_db
+from api import (
+    casting_blueprint, unprocessable, bad_request, method_not_allowed, internal_sever_error, not_found, permission_error
 )
 
 
@@ -17,7 +17,8 @@ def create_app(test_config=None):
     app.register_error_handler(405, method_not_allowed)
     app.register_error_handler(500, internal_sever_error)
     app.register_error_handler(404, not_found)
-    # app.register_error_handler(401, permission_error)
+    app.register_error_handler(401, permission_error)
+
     app.config.from_object('config.DBConfig')
     setup_db(app)
     migrate = Migrate(app, db)
@@ -54,6 +55,7 @@ def create_app(test_config=None):
 
 
 app = create_app()
+
 
 if __name__ == '__main__':
     app.run()

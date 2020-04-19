@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify, abort
 import json
 from models import db_drop_and_create_all, setup_db, db, Actor, Movie
 from auth import AuthError, requires_auth
+
+
 casting_blueprint = Blueprint('gsprod-api', __name__)
 
 
@@ -64,9 +66,9 @@ def get_actors(jwt):
 @requires_auth('get:movies')
 def get_movie(jwt, movie_id):
     print('getting movie for id: {}'.format(movie_id))
-    movie = Movie.query.get(movie_id)
-    print('found movie', movie.format())
+    movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
     if movie:
+        print('found movie', movie.format())
         return jsonify({
             'success': True,
             'movie': movie.format()
@@ -109,14 +111,16 @@ def post_movie(jwt):
     )
     try:
         movie.insert()
-    except Exception as e:
-        db.session.rollback()
-        abort(422)
-    finally:
+        print('success')
         return jsonify({
             'success': True,
             'movie': movie.format()
         }), 200
+    except Exception:
+        print('fails')
+        db.session.rollback()
+        abort(422)
+    finally:
         db.session.close()
 
 
@@ -134,14 +138,14 @@ def post_actor(jwt):
     )
     try:
         actor.insert()
-    except Exception as e:
-        db.session.rollback()
-        abort(422)
-    finally:
         return jsonify({
             'success': True,
             'actor': actor.format()
         }), 200
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
         db.session.close()
 
 
@@ -168,14 +172,14 @@ def patch_movie(jwt, movie_id):
         movie.title = data.get('title')
         movie.year = data.get('year')
         movie.update()
-    except Exception:
-        db.session.rollback()
-        abort(422)
-    finally:
         return jsonify({
             'success': True,
             'movies': [movie.format()]
         }), 200
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
         db.session.close()
 
 
@@ -193,14 +197,14 @@ def patch_actor(jwt, actor_id):
         actor.age = data.get('age')
         actor.gender = data.get('gender')
         actor.update()
-    except Exception:
-        db.session.rollback()
-        abort(422)
-    finally:
         return jsonify({
             'success': True,
             'actors': [actor.format()]
         }), 200
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
         db.session.close()
 
 
@@ -218,19 +222,20 @@ def patch_actor(jwt, actor_id):
 @requires_auth('delete:movies')
 def delete_movie(jwt, movie_id):
     """Delete an existing movie using the DELETE method"""
-    movie = Movie.query.filter(Movie.id == movie_id)
+    movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
+    print('deleting {}'.format(movie))
     if movie is None:
         abort(404, 'Movie not found.')
     try:
         movie.delete()
-    except Exception:
-        db.session.rollback()
-        abort(422)
-    finally:
         return jsonify({
             'success': True,
             'delete': movie_id
         }), 200
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
         db.session.close()
 
 
@@ -238,19 +243,20 @@ def delete_movie(jwt, movie_id):
 @requires_auth('delete:actors')
 def delete_actor(jwt, actor_id):
     """Delete an existing actor using the DELETE method"""
-    actor = Actor.query.filter(Actor.id == actor_id)
+    actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
+    print('deleting {}'.format(actor))
     if actor is None:
         abort(404, 'Actor not found.')
     try:
         actor.delete()
-    except Exception:
-        db.session.rollback()
-        abort(422)
-    finally:
         return jsonify({
             'success': True,
             'delete': actor_id
         }), 200
+    except Exception:
+        db.session.rollback()
+        abort(422)
+    finally:
         db.session.close()
 
 

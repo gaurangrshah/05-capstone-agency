@@ -65,37 +65,9 @@ def get_token_auth_header():
         }, 401)
 
     token = parts[1]  # return only the token from parts
+    if token:
+        print('token exists')
     return token
-
-
-'''
-@TODO implement check_permissions(permission, payload) method
-    @INPUTS
-        permission: string permission (i.e. 'post:drink')
-        payload: decoded jwt payload
-
-    it should raise an AuthError if permissions are not included in the payload
-        !!NOTE check your RBAC settings in Auth0
-    it should raise an AuthError if the requested permission string is not in the payload permissions array
-    return true otherwise
-'''
-
-
-def check_permissions(permission, payload):
-    """Checks for permission in JWT"""
-    if 'permissions' not in payload:
-        # look for permissions in payload
-        raise AuthError({
-            'code': 'invalid_claims',
-            'description': 'Permission not included in JWT.'
-        }, 400)
-    if permission not in payload['permissions']:
-        # look for permission in payload properties
-        raise AuthError({
-            'code': 'unauthorized',
-            'description': 'Permission not found.'
-        }, 401)
-    return True
 
 
 '''
@@ -120,6 +92,7 @@ def verify_decode_jwt(token):
     unverified_header = jwt.get_unverified_header(token)
     rsa_key = {}
     if 'kid' not in unverified_header:
+        print("'kid' not in unverified_header")
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization malformed.'
@@ -143,28 +116,67 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer='https://' + AUTH0_DOMAIN + '/'
             )
+            print('rsa key found')
             return payload
 
         except jwt.ExpiredSignatureError:
+            print('payload token_expired')
             raise AuthError({
                 'code': 'token_expired',
                 'description': 'Token expired.'
             }, 401)
 
         except jwt.JWTClaimsError:
+            print('payload invalid_claims')
             raise AuthError({
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
             }, 401)
         except Exception:
+            print('payload invalid_header')
             raise AuthError({
                 'code': 'invalid_header',
                 'description': 'Unable to parse authentication token.'
             }, 400)
+    print('payload unable to find key')
     raise AuthError({
         'code': 'invalid_header',
-                'description': 'Unable to find the appropriate key.'
+        'description': 'Unable to find the appropriate key.'
     }, 400)
+
+
+'''
+@TODO implement check_permissions(permission, payload) method
+    @INPUTS
+        permission: string permission (i.e. 'post:drink')
+        payload: decoded jwt payload
+
+    it should raise an AuthError if permissions are not included in the payload
+        !!NOTE check your RBAC settings in Auth0
+    it should raise an AuthError if the requested permission string is not in the payload permissions array
+    return true otherwise
+'''
+
+
+def check_permissions(permission, payload):
+    # 🚧 checking permissions, invalid permissions still result in a 200 status
+    # status should be 401 not 200 if permissions are false
+    """Checks for permission in JWT"""
+    if 'permissions' not in payload:
+        # look for permissions in payload
+        print("'permissions' not in payload")
+        raise AuthError({
+            'code': 'invalid_claims',
+            'description': 'Permission not included in JWT.'
+        }, 400)
+    if permission not in payload['permissions']:
+        # look for permission in payload properties
+        print("permission not in payload['permissions']")
+        raise AuthError({
+            'code': 'unauthorized',
+            'description': 'Permission not found.'
+        }, 401)
+    return True
 
     '''
 @TODO implement @requires_auth(permission) decorator method
@@ -187,6 +199,7 @@ def requires_auth(permission=''):  # defaults permission to empty string
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             # check permissions
+            print('checking permission for', permission)
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
         return wrapper

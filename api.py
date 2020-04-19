@@ -63,13 +63,13 @@ def get_actors(jwt):
 @casting_blueprint.route('/movies/<int:movie_id>', methods=['GET'])
 @requires_auth('get:movies')
 def get_movie(jwt, movie_id):
-    print('getting movie for id:', movie_id)
+    print('getting movie for id: {}'.format(movie_id))
     movie = Movie.query.get(movie_id)
     print('found movie', movie.format())
     if movie:
         return jsonify({
             'success': True,
-            'movie': [movie.format()]
+            'movie': movie.format()
         }), 200
     else:
         abort(404, 'Actor with id: {} not found'.format(movie_id))
@@ -82,7 +82,7 @@ def get_actor(jwt, actor_id):
     if actor:
         return jsonify({
             'success': True,
-            'actor': [actor.format()]
+            'actor': actor.format()
         }), 200
     else:
         abort(404, 'Actor with id: {} not found'.format(actor_id))
@@ -218,7 +218,7 @@ def patch_actor(jwt, actor_id):
 @requires_auth('delete:movies')
 def delete_movie(jwt, movie_id):
     """Delete an existing movie using the DELETE method"""
-    movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
+    movie = Movie.query.filter(Movie.id == movie_id)
     if movie is None:
         abort(404, 'Movie not found.')
     try:
@@ -238,7 +238,7 @@ def delete_movie(jwt, movie_id):
 @requires_auth('delete:actors')
 def delete_actor(jwt, actor_id):
     """Delete an existing actor using the DELETE method"""
-    actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
+    actor = Actor.query.filter(Actor.id == actor_id)
     if actor is None:
         abort(404, 'Actor not found.')
     try:

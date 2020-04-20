@@ -243,6 +243,7 @@ def delete_movie(jwt, movie_id):
 @requires_auth('delete:actors')
 def delete_actor(jwt, actor_id):
     """Delete an existing actor using the DELETE method"""
+    print(jwt)
     actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
     print('deleting {}'.format(actor))
     if actor is None:
@@ -336,7 +337,7 @@ def permission_error(exception):
     return jsonify({
         'error': exception.error,
         'status': exception.status_code
-    })
+    }), 401
 
 
 @casting_blueprint.route('/seed')

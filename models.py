@@ -16,7 +16,16 @@ def db_drop_and_create_all():
     db.create_all()
 
 
-def setup_db(app):
+def setup_db(app, config=None, database_path=None):
+    app.config.from_object(config or {})
+    if database_path:
+        print('found path from database test config')
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_path
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    else:
+        app.config.from_object(config or {})
+    print('check dbconfig', app.config["SQLALCHEMY_DATABASE_URI"])
     db.app = app
     db.init_app(app)
     # db.create_all()

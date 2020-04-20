@@ -1,13 +1,17 @@
+import os
 import json
 from flask import request, _request_ctx_stack, abort
 from jose import jwt
 from functools import wraps
 from urllib.request import urlopen
-from config import Auth0Config
+# from config import Auth0Config
 
-AUTH0_DOMAIN = Auth0Config.domain
-ALGORITHMS = Auth0Config.algorithms
-API_AUDIENCE = Auth0Config.audience
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')
+ALGORITHMS = os.getenv('AUTH0_ALGORITHMS')
+API_AUDIENCE = os.getenv('AUTH0_AUDIENCE')
 
 
 # AuthError Exception

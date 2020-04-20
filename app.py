@@ -9,7 +9,6 @@ from api import (
 
 
 def create_app(test_config=None):  # 🚧
-    # def create_app(config=None):
     app = Flask(__name__)
     app.register_blueprint(casting_blueprint, url_prefix='/api')
     app.register_error_handler(422, unprocessable)
@@ -19,8 +18,7 @@ def create_app(test_config=None):  # 🚧
     app.register_error_handler(404, not_found)
     app.register_error_handler(401, permission_error)
 
-    # app.config.from_object(config or {})
-    setup_db(app, 'config.DBConfig')
+    setup_db(app)
     migrate = Migrate(app, db)
     # cors = CORS(app)
     cors = CORS(app, resources={r"/api*": {"origins": "*"}})

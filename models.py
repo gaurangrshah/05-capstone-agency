@@ -1,7 +1,15 @@
-from flask.cli import with_appcontext
+import os
 from flask_sqlalchemy import SQLAlchemy
 import dateutil.parser
 from flask_migrate import Migrate
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+DEBUG = True
+SECRET_KEY = os.urandom(32)
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+
 
 db = SQLAlchemy()
 
@@ -16,16 +24,12 @@ def db_drop_and_create_all():
     db.create_all()
 
 
-def setup_db(app, config=None, database_path=None):
-    app.config.from_object(config or {})
-    if database_path:
-        print('found path from database test config')
-        app.config['SQLALCHEMY_DATABASE_URI'] = database_path
-        app.config['TESTING'] = True
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    else:
-        app.config.from_object(config or {})
-    print('check dbconfig', app.config["SQLALCHEMY_DATABASE_URI"])
+def setup_db(app, database_path=None):
+    app.config['DEBUG'] = DEBUG
+    app.config['SECRET_KEY'] = SECRET_KEY
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_path if database_path else SQLALCHEMY_DATABASE_URI
+    print('using db: ', app.config['SQLALCHEMY_DATABASE_URI'])
     db.app = app
     db.init_app(app)
     # db.create_all()

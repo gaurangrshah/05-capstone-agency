@@ -1,12 +1,14 @@
 import os
 import unittest
 import json
-import sys
 from flask_sqlalchemy import SQLAlchemy
 from app import create_app
-from config import TestDBConfig
 # remove db and dbdropandcreate
 from models import db, db_drop_and_create_all, setup_db, Actor, Movie
+
+
+TESTING = True
+SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URL')
 
 
 class ApiTestCase(unittest.TestCase):
@@ -29,32 +31,25 @@ class ApiTestCase(unittest.TestCase):
         movie2.insert()
         movie3.insert()
 
-        self.db.session.commit()
         self.db.session.close()
 
     def setup(self):
         """ Configure test client with app & db """
         self.app = create_app()
         self.client = self.app.test_client
-        # self.database_path = os.getenv('TEST_DATABASE_URL')
-        self.database_path = 'postgres://bunty@localhost:5432/casting_test'
+        # self.database_path = 'postgres://bunty@localhost:5432/casting_test'
         self.headers = {
             'Authorization': f'Bearer {os.getenv("EXEC_PROD_TOKEN")}'
         }
-        setup_db(self.app, None, database_path=self.database_path)
+        setup_db(self.app, database_path=SQLALCHEMY_DATABASE_URI)
 
         with self.app.app_context():
             self.db = SQLAlchemy()
-            # self.app.config["TESTING"] = True
-            # self.app.config["SQLALCHEMY_DATABASE_URI"] = self.database_path
-            # self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-            # sys.stdout = sys.__stdout__
-            # print('from unittest')
-            self.db.app = self.app
+            # self.app.config["TESTING"] = TESTING
             self.db.init_app(self.app)
             self.db.create_all()
 
-        # self.insert_data()
+        self.insert_data()
 
     # def setup(self):
     #     self.app = create_app()  # 'config.TestDBConfig'
@@ -83,20 +78,21 @@ class ApiTestCase(unittest.TestCase):
         pass
 
     def test_test(self):
+        """Test if tests are setup"""
         self.assertEqual(True, True)
 
-    # def test_db(self):
-    #     """Test if the db gets populated correctly"""
-    #     actors = Actor.query.all()  # get all actors
-    #     # test if actors is a list
-    #     self.assertEqual(isinstance(actors, list), True)
-    #     # test if the first item is an Actor
-    #     self.assertEqual(isinstance(actors[0], Actor), True)
-    #     movies = Movie.query.all()  # get all movies
-    #     # test if movies is a list
-    #     self.assertEqual(isinstance(movies, list), True)
-    #     # test if the first item is an Actor
-    #     self.assertEqual(isinstance(movies[0], Movie), True)
+    def test_db(self):
+        """Test if the db gets populated correctly"""
+        actors = Actor.query.all()  # get all actors
+        # test if actors is a list
+        self.assertEqual(isinstance(actors, list), True)
+        # test if the first item is an Actor
+        self.assertEqual(isinstance(actors[0], Actor), True)
+        movies = Movie.query.all()  # get all movies
+        # test if movies is a list
+        self.assertEqual(isinstance(movies, list), True)
+        # test if the first item is an Actor
+        self.assertEqual(isinstance(movies[0], Movie), True)
 
 
 if __name__ == '__main__':

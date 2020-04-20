@@ -40,7 +40,10 @@ class AuthError(Exception):
 def get_token_auth_header():
     """Grab Access Token from the Authorization Header in request"""
     auth = request.headers.get('Authorization', None)
+    if auth:
+        print('🚩request.headers:', request.headers)
     if not auth:  # ensures auth has a truthy value
+        print('authorization_header_missing')
         raise AuthError({
             'code': 'authorization_header_missing',
             'description': 'Authorization header is expected.'
@@ -48,12 +51,14 @@ def get_token_auth_header():
 
     parts = auth.split()
     if parts[0].lower() != 'bearer':
+        print('invalid_header')
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization header must start with "Bearer".'
         }, 401)
 
     elif len(parts) == 1:
+        print('Token not found.')
         raise AuthError({
             # assumes token is not in header
             'code': 'invalid_header',
@@ -61,6 +66,7 @@ def get_token_auth_header():
         }, 401)
 
     elif len(parts) > 2:  # if header has more than two items
+        print('Authorization header must be bearer token.')
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization header must be bearer token.'
@@ -68,7 +74,7 @@ def get_token_auth_header():
 
     token = parts[1]  # return only the token from parts
     if token:
-        print('✅ found token in header')
+        print('✅ found token in header:', token)
     return token
 
 
@@ -89,9 +95,13 @@ def get_token_auth_header():
 
 def verify_decode_jwt(token):
     """Uses the Auth0 secret to decode then verify the provided token"""
+    print('verifier')
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
+    print('jsonurl', jsonurl)
     jwks = json.loads(jsonurl.read())
+    print('jwks', jwks)
     unverified_header = jwt.get_unverified_header(token)
+    print('unverified_header', unverified_header)
     rsa_key = {}
     if 'kid' not in unverified_header:
         print("'kid' not in unverified_header")
@@ -111,6 +121,7 @@ def verify_decode_jwt(token):
             }
     if rsa_key:
         try:
+            print('checking rsa key', rsa_key)
             payload = jwt.decode(
                 token,
                 rsa_key,
@@ -118,7 +129,7 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer='https://' + AUTH0_DOMAIN + '/'
             )
-            print('✅ rsa key found')
+            print('✅ rsa key found', payload)
             return payload
 
         except jwt.ExpiredSignatureError:
@@ -197,11 +208,15 @@ def requires_auth(permission=''):  # defaults permission to empty string
         @wraps(f)
         def wrapper(*args, **kwargs):
             # validate token
+            print('🚧 validating token in header')
             token = get_token_auth_header()
+            print('verifying header payload')
             payload = verify_decode_jwt(token)
+            print('payload', payload)
             # check permissions
             print('🧐 checking permission for', permission)
             check_permissions(permission, payload)
+            print('permitted')
             return f(payload, *args, **kwargs)
         return wrapper
     return requires_auth_decorator

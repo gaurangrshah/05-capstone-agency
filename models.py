@@ -3,12 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 import dateutil.parser
 from flask_migrate import Migrate
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
 DEBUG = True
 SECRET_KEY = os.urandom(32)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 database_path = os.getenv('DATABASE_URL')
+test_database_path = os.getenv('TEST_DATABASE_PATH')
 
 
 db = SQLAlchemy()

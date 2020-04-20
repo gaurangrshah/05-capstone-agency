@@ -330,7 +330,7 @@ def not_found(error):
 @casting_blueprint.errorhandler(AuthError)
 def permission_error(exception):
     return jsonify({
-        'error': exception.error,
+        'error': exception.error['description'],
         'status': exception.status_code
     }), 401
 

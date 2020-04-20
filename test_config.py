@@ -20,31 +20,32 @@ database_path = os.environ.get('TEST_DATABASE_URL')
 class ApiTestCase(unittest.TestCase):
     """ Represents the api test case """
 
-    # def inserts(self):
-    #     """Seed test database with initial data"""
-    #     actor1 = Actor(name="Sam Jones", age=25, gender='m')
-    #     actor2 = Actor(name="Cynthia Jones", age=22, gender='f')
-    #     actor3 = Actor(name="Vanna White", age=32, gender='f')
+    def inserts(self):
+        """Seed test database with initial data"""
+        actor1 = Actor(name="Sam Jones", age=25, gender='m')
+        actor2 = Actor(name="Cynthia Jones", age=22, gender='f')
+        actor3 = Actor(name="Vanna White", age=32, gender='f')
 
-    #     movie1 = Movie(title="The Movie", year=2015)
-    #     movie2 = Movie(title="The Movie 2", year=2016)
-    #     movie3 = Movie(title="The Movie 3", year=2017)
+        movie1 = Movie(title="The Movie", year=2015)
+        movie2 = Movie(title="The Movie 2", year=2016)
+        movie3 = Movie(title="The Movie 3", year=2017)
 
-    #     # actor1.insert()
-    #     # actor2.insert()
-    #     # actor3.insert()
-    #     # movie1.insert()
-    #     # movie2.insert()
-    #     # movie3.insert()
+        # actor1.insert()
+        # actor2.insert()
+        # actor3.insert()
+        # movie1.insert()
+        # movie2.insert()
+        # movie3.insert()
 
-    #     self.db.session.add(actor1)
-    #     self.db.session.add(actor2)
-    #     self.db.session.add(actor3)
+        self.db.session.add(actor1)
+        self.db.session.add(actor2)
+        self.db.session.add(actor3)
 
-    #     self.db.session.add(movie1)
-    #     self.db.session.add(movie2)
-    #     self.db.session.add(movie3)
-    #     self.db.session.close()
+        self.db.session.add(movie1)
+        self.db.session.add(movie2)
+        self.db.session.add(movie3)
+        self.db.session.commit()
+        self.db.session.close()
 
     def setUp(self):
         """ Configure test client with app & db """
@@ -56,13 +57,13 @@ class ApiTestCase(unittest.TestCase):
         setup_db(self.app, database_path=database_path)
 
         with self.app.app_context():
-            self.db = SQLAlchemy()
+            self.db = db
             # self.app.config["TESTING"] = TESTING
-            self.db.init_app(self.app)
-            # self.db.drop_all()
+            # self.db.init_app(self.app)
+            self.db.drop_all()
             self.db.create_all()
 
-            # self.inserts()
+            self.inserts()
 
     def tearDown(self):
         """Runs cleanup after each test"""

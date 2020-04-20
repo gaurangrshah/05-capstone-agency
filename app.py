@@ -23,18 +23,6 @@ def create_app(test_config=None):  # 🚧
     # cors = CORS(app)
     cors = CORS(app, resources={r"/api*": {"origins": "*"}})
 
-    @app.after_request
-    def after_request(response):
-        response.headers.add(
-            'Access-Control-Allow-Headers',
-            'Content-Type,Authorization,true'
-        )
-        response.headers.add(
-            'Access-Control-Allow-Methods',
-            'GET,PATCH,POST,DELETE,OPTIONS'
-        )
-        print('✅ response after_request', response)
-        return response
 
     @app.route('/')
     def get_greeting():

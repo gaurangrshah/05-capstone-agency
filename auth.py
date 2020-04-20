@@ -4,10 +4,8 @@ from flask import request, _request_ctx_stack, abort
 from jose import jwt
 from functools import wraps
 from urllib.request import urlopen
-# from config import Auth0Config
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 
 AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')
 ALGORITHMS = os.getenv('AUTH0_ALGORITHMS')

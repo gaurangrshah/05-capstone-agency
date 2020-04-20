@@ -6,15 +6,17 @@ from app import create_app
 # remove db and dbdropandcreate
 from models import db, db_drop_and_create_all, setup_db, Actor, Movie
 
-
 TESTING = True
-SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URL')
+EXEC_PROD_TOKEN = os.getenv('EXEC_PROD_TOKEN')
+database_path = os.getenv('TEST_DATABASE_URL')
+
+print(EXEC_PROD_TOKEN)
 
 
 class ApiTestCase(unittest.TestCase):
     """ Represents the api test case """
 
-    def insert_data(self):
+    def inserts(self):
         """Seed test database with initial data"""
         actor1 = Actor(name="Sam Jones", age=25, gender='m')
         actor2 = Actor(name="Cynthia Jones", age=22, gender='f')
@@ -24,24 +26,33 @@ class ApiTestCase(unittest.TestCase):
         movie2 = Movie(title="The Movie 2", year=2016)
         movie3 = Movie(title="The Movie 3", year=2017)
 
-        actor1.insert()
-        actor2.insert()
-        actor3.insert()
-        movie1.insert()
-        movie2.insert()
-        movie3.insert()
+        # actor1.insert()
+        # actor2.insert()
+        # actor3.insert()
+        # movie1.insert()
+        # movie2.insert()
+        # movie3.insert()
 
+        self.db.session.add(actor1)
+        self.db.session.add(actor2)
+        self.db.session.add(actor3)
+        self.db.session.add(movie1)
+        self.db.session.add(movie2)
+        self.db.session.add(movie3)
+
+        self.db.session.commit()
         self.db.session.close()
 
-    def setup(self):
+    def setUp(self):
         """ Configure test client with app & db """
         self.app = create_app()
+        self.database_path = database_path
         self.client = self.app.test_client
         # self.database_path = 'postgres://bunty@localhost:5432/casting_test'
         self.headers = {
-            'Authorization': f'Bearer {os.getenv("EXEC_PROD_TOKEN")}'
+            'Authorization': f'Bearer {EXEC_PROD_TOKEN}'
         }
-        setup_db(self.app, database_path=SQLALCHEMY_DATABASE_URI)
+        setup_db(self.app, self.database_path)
 
         with self.app.app_context():
             self.db = SQLAlchemy()
@@ -49,7 +60,7 @@ class ApiTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             self.db.create_all()
 
-        self.insert_data()
+            # self.inserts()
 
     # def setup(self):
     #     self.app = create_app()  # 'config.TestDBConfig'
@@ -60,14 +71,11 @@ class ApiTestCase(unittest.TestCase):
     #     self.headers = {
     #         'Authorization': f'Bearer {os.getenv("EXEC_PROD_TOKEN")}'
     #     }
-
     #     self.db = SQLAlchemy()
     #     self.db.init_app(self.app)
-
     #     self.db.session.commit()
     #     self.db.drop_all()
     #     self.db.create_all()
-
     #     self.insert_data()
 
     def tearDown(self):
@@ -81,18 +89,10 @@ class ApiTestCase(unittest.TestCase):
         """Test if tests are setup"""
         self.assertEqual(True, True)
 
-    def test_db(self):
-        """Test if the db gets populated correctly"""
-        actors = Actor.query.all()  # get all actors
-        # test if actors is a list
-        self.assertEqual(isinstance(actors, list), True)
-        # test if the first item is an Actor
-        self.assertEqual(isinstance(actors[0], Actor), True)
-        movies = Movie.query.all()  # get all movies
-        # test if movies is a list
-        self.assertEqual(isinstance(movies, list), True)
-        # test if the first item is an Actor
-        self.assertEqual(isinstance(movies[0], Movie), True)
+    # def test_get_actors(self):
+    #     """Test get actors"""
+    #     r = self.client().get('/api/actors', headers=self.headers)
+    #     self.assertEqual(r.status_code, 200)
 
 
 if __name__ == '__main__':

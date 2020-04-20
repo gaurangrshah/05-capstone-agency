@@ -68,7 +68,6 @@ def get_movie(jwt, movie_id):
     print('getting movie for id: {}'.format(movie_id))
     movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
     if movie:
-        print('found movie', movie.format())
         return jsonify({
             'success': True,
             'movie': movie.format()
@@ -117,7 +116,6 @@ def post_movie(jwt):
             'movie': movie.format()
         }), 200
     except Exception:
-        print('fails')
         db.session.rollback()
         abort(422)
     finally:
@@ -223,7 +221,6 @@ def patch_actor(jwt, actor_id):
 def delete_movie(jwt, movie_id):
     """Delete an existing movie using the DELETE method"""
     movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
-    print('deleting {}'.format(movie))
     if movie is None:
         abort(404, 'Movie not found.')
     try:
@@ -243,9 +240,7 @@ def delete_movie(jwt, movie_id):
 @requires_auth('delete:actors')
 def delete_actor(jwt, actor_id):
     """Delete an existing actor using the DELETE method"""
-    print(jwt)
     actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
-    print('deleting {}'.format(actor))
     if actor is None:
         abort(404, 'Actor not found.')
     try:
@@ -366,3 +361,17 @@ def add_dummy_data():
         "success": 200,
         "message": "db populated successfully"
     })
+
+
+@casting_blueprint.after_request
+def after_request(response):
+    response.headers.add(
+        'Access-Control-Allow-Headers',
+        'Content-Type,Authorization,true'
+    )
+    response.headers.add(
+        'Access-Control-Allow-Methods',
+        'GET,PATCH,POST,DELETE,OPTIONS'
+    )
+    print('✅ response after_request', response)
+    return response

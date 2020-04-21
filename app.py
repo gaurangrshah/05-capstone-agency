@@ -8,7 +8,7 @@ from api import (
 )
 
 
-def create_app(test_config=None):  # 🚧
+def create_app(test_config=None):
     app = Flask(__name__)
     app.register_blueprint(casting_blueprint, url_prefix='/api')
     app.register_error_handler(422, unprocessable)

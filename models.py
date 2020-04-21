@@ -3,6 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 import dateutil.parser
 from flask_migrate import Migrate
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
 DEBUG = True
 SECRET_KEY = os.urandom(32)
 SQLALCHEMY_TRACK_MODIFICATIONS = False

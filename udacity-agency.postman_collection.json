@@ -1,0 +1,1813 @@
+{
+	"info": {
+		"_postman_id": "8c180efa-aaeb-486f-a841-8ce293106540",
+		"name": "udacity-agency",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "executive-producer",
+			"item": [
+				{
+					"name": "1.SeedDB",
+					"item": [
+						{
+							"name": "{{host}}/api/seed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "96ab365c-c046-4a8e-86bf-12fd168a4e05",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/seed",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"seed"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "this endpoint drops, creates new db and seeds the new db",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "actors",
+					"item": [
+						{
+							"name": "{{host}}/api/actors",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains actors array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.actors).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Tim Adams\",\n\t\"age\": 24,\n\t\"gender\": \"m\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/actors",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains actors array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.actors).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Samantha Adams\",\n\t\"age\": 32,\n\t\"gender\": \"f\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/actors/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors/4",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "error tests",
+					"item": [
+						{
+							"name": "errors-movies",
+							"item": [
+								{
+									"name": "ERROR: {{host}}/api/movies",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+												"exec": [
+													"pm.test(\"Status code is 422\", function () {",
+													"    pm.response.to.have.status(422);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"title\": \"The Movie 4\",\n\t\"year\": \"Ingeter error\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/movies",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"movies"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ERROR: {{host}}/api/movies/<movie_id> Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"title\": \"The Movie 4.1\",\n\t\"year\": 2020\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/movies/22",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"movies",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ERROR: {{host}}/api/movies/<movie_id>",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/movies/22",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"movies",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ERROR: {{host}}/api/movies/<movie_id>",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/movies/22",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"movies",
+												"22"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "326a3f0a-e15b-4db9-9c3b-17289340b6da",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "5a2cb76c-056a-4cc0-ad24-90ecfe51873c",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "errors-actors",
+							"item": [
+								{
+									"name": "ERROR: {{host}}/api/actors",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+												"exec": [
+													"pm.test(\"Status code is 422\", function () {",
+													"    pm.response.to.have.status(422);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"name\": \"Tim Adams\",\n\t\"age\": \"m\",\n\t\"gender\": 24\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/actors",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"actors"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ERROR: {{host}}/api/actors/<actor_id> Copy",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"name\": \"Samantha Adams\",\n\t\"age\": 32,\n\t\"gender\": \"f\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{host}}/api/actors/22",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"actors",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ERROR: {{host}}/api/actors/<actor_id>",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/actors/22",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"actors",
+												"22"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Error: {{host}}/api/actors/<actor_id>",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+												"exec": [
+													"pm.test(\"Status code is 404\", function () {",
+													"    pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/api/actors/22",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"actors",
+												"22"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "movies",
+					"item": [
+						{
+							"name": "{{host}}/api/movies",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains movies array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.movies).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/movies",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"title\": \"The Movie 4\",\n\t\"year\": 2017\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/movies",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains movies array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.movies).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"title\": \"The Movie 4.1\",\n\t\"year\": 2018\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/movies/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies/4",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjdFOHFSUDZDVlVOYnVVRnB2TTktQiJ9.eyJpc3MiOiJodHRwczovL2dzLXByb2QuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVlOWIwY2E0NDlmYjI0MGM4YTIyMWE2MiIsImF1ZCI6ImNhc3RpbmciLCJpYXQiOjE1ODc0MDUxMDMsImV4cCI6MTU4NzQ5MTUwMywiYXpwIjoiZ2R2bWRJVm8xaEQ5ZWxFc3NVZ3VnaDlYdnNLYzZGRUciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.w9EkVYIYGjgHeHvqL6z50dC9woh_fJ1MPYpNw4h9OFxUciq0CySRHKRMhDRHumLpfl3GGJwofagcgsdodyaIGNFPPLL1s_p56hEP3rigq6ynPpuxZKRkm0_zi8APxxaGIUa_AE81Uyr1FYiNC21PN11JV7OMzCbBdULc8ChNK7GKAocLoz880LP2ZqsctFJtCaHPgIW2Yr_fy9BuJQNabGSdDizXWU_QDIZZBBdf4Q0w1l0Tz2bMKp3-8QBVhADMEGcnZKNMIW05RBE0LHxQnwSIq1AvjUUL9qe7WZjLW94L65HHphuOTVKoOYR9eud2lSeB7sWXeGcu6xlREfqduA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3dba1228-ad31-4b30-bd0f-8eadbed772ab",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "cc54b775-e0fc-4a8c-b9f2-4466729fb500",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "casting-director",
+			"item": [
+				{
+					"name": "1.SeedDB",
+					"item": [
+						{
+							"name": "{{host}}/api/seed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "96ab365c-c046-4a8e-86bf-12fd168a4e05",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/seed",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"seed"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "this endpoint drops, creates new db and seeds the new db",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "movies",
+					"item": [
+						{
+							"name": "{{host}}/api/movies",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains movies array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.movies).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAIL: {{host}}/api/movies",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"title\": \"The Movie 5\",\n\t\"year\": 2019\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/movies",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains movies array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.movies).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"title\": \"The Movie 4.1\",\n\t\"year\": 2018\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/movies/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAIL: {{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "actors",
+					"item": [
+						{
+							"name": "{{host}}/api/actors",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains actors array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.actors).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Tim Adams\",\n\t\"age\": 24,\n\t\"gender\": \"m\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/actors",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains actors array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.actors).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Samantha Adams\",\n\t\"age\": 32,\n\t\"gender\": \"f\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/actors/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors/4",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjdFOHFSUDZDVlVOYnVVRnB2TTktQiJ9.eyJpc3MiOiJodHRwczovL2dzLXByb2QuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVlOWIwZDY0NDlmYjI0MGM4YTIyMWNkNyIsImF1ZCI6ImNhc3RpbmciLCJpYXQiOjE1ODczNjA1OTksImV4cCI6MTU4NzQ0Njk5OSwiYXpwIjoiZ2R2bWRJVm8xaEQ5ZWxFc3NVZ3VnaDlYdnNLYzZGRUciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyIsInBhdGNoOmFjdG9ycyIsInBhdGNoOm1vdmllcyIsInBvc3Q6YWN0b3JzIl19.ehAzdKTqd4t2eiSb5KparR93iagE9GcOrOtY1Z0s01uMpxCphaH5FD-HWmgWpVB26Vz0PUvk-Gw-1kn0kbunQKd8ci4u67ol_k2B02BOpoyvfGh6KFYOOaMQtKzhbRMbNRIPnqjKjgmViosGWwHdE-upg5Wzv5kYZSJ2YstuMFzvzmcOqdpYX9i2b2MvOfwPmu5W1A-4U-pBCse2WNW_IgV_YJIiDxe7YyIQILSAGfq2k-gSOlQ9cMDcSZ0s1-UPegFhvAi70xE_3Lv9-pxsHJFqcPJTXQhh3RPWuvyXMGqwd0ZPItNWUnkXbTymJ8GTeKbwilCynmXcmI1J3WC70g",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3dba1228-ad31-4b30-bd0f-8eadbed772ab",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "cc54b775-e0fc-4a8c-b9f2-4466729fb500",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "casting-assistant",
+			"item": [
+				{
+					"name": "1.SeedDB",
+					"item": [
+						{
+							"name": "{{host}}/api/seed",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "96ab365c-c046-4a8e-86bf-12fd168a4e05",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/seed",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"seed"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "this endpoint drops, creates new db and seeds the new db",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "movies",
+					"item": [
+						{
+							"name": "{{host}}/api/movies",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains movies array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.movies).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAIL: {{host}}/api/movies",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"title\": \"The Movie 5\",\n\t\"year\": 2019\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/movies",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAIL: {{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"title\": \"The Movie 4.1\",\n\t\"year\": 2018\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/movies/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAIL: {{host}}/api/movies/<movie_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/movies/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"movies",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "actors",
+					"item": [
+						{
+							"name": "{{host}}/api/actors",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"value contains actors array\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.actors).to.be.an('array')",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAIL: {{host}}/api/actors",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Tim Adams\",\n\t\"age\": 24,\n\t\"gender\": \"m\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/actors",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAIL: {{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3f0542c-e63e-4104-a61b-f7a7a736e783",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Samantha Adams\",\n\t\"age\": 32,\n\t\"gender\": \"f\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/actors/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FAIL: {{host}}/api/actors/<actor_id>",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2a76be38-0946-4f12-b20b-2416decfe5fe",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/actors/4",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"actors",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjdFOHFSUDZDVlVOYnVVRnB2TTktQiJ9.eyJpc3MiOiJodHRwczovL2dzLXByb2QuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVlOWIwZTIxNDlmYjI0MGM4YTIyMWYwYiIsImF1ZCI6ImNhc3RpbmciLCJpYXQiOjE1ODczNjA2ODksImV4cCI6MTU4NzQ0NzA4OSwiYXpwIjoiZ2R2bWRJVm8xaEQ5ZWxFc3NVZ3VnaDlYdnNLYzZGRUciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImdldDphY3RvcnMiLCJnZXQ6bW92aWVzIl19.T45JiWlDW71VjVuoo7UsHXkZx4PoyX7rEXE5Dh8wlyM-CrQG0x-VkhWf8Pl3Qd5qfA3EtzJGIpzrQjIw2md1YqXiuP26TbzH2UBzf5arEUpQA8BRk2GuiUM21Nnu-MgzGjweJwpjgJeNQpD5uas_GeMZqjLzTMsG7HdUNSUw21LcWBJ7rz8zmjc-f4ZngyqPaZw7GRaz6-7ZkVd7pGbv6XPOPYSeHexSI1xdO-U_SAwxzgqQsEa2UALn8epwxwzxDCMpy1AODi7lSY1llhSpCxjAF4qjYtpzPpexgPn5bO22Z9A8SlBm8o2QTHbmLMIMd2FEGS5_WFxE-TBmS27whg",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3dba1228-ad31-4b30-bd0f-8eadbed772ab",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "cc54b775-e0fc-4a8c-b9f2-4466729fb500",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4b414b02-849d-4689-8921-cef360166e05",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "55236fbd-426f-40ec-874c-f3705c8c35ef",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "e86308d2-86b9-45c4-889f-bab8e680f47d",
+			"key": "host",
+			"value": "localhost:5000",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

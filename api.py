@@ -3,7 +3,6 @@ import json
 from models import db_drop_and_create_all, setup_db, db, Actor, Movie
 from auth import AuthError, requires_auth
 
-
 casting_blueprint = Blueprint('gsprod-api', __name__)
 
 

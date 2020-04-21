@@ -15,7 +15,7 @@ EXEC_PROD_TOKEN = os.environ['EXEC_PROD_TOKEN']
 # https://manage.auth0.com/dashboard/us/gs-prod/apis/management/explorer
 TESTING_TOKEN = os.environ['TESTING_TOKEN']
 
-database_path = os.environ.get('TEST_DATABASE_URL')
+database_path = os.environ['TEST_DATABASE_URL']
 bearer = 'Bearer ' + EXEC_PROD_TOKEN
 # print(EXEC_PROD_TOKEN)
 # print(bearer)
@@ -49,8 +49,7 @@ class ApiTestCase(unittest.TestCase):
         self.app = create_app()
 
         self.client = self.app.test_client
-        self.headers = {
-            'Authorization': bearer}
+        self.headers = {"Authorization": "Bearer {}".format(EXEC_PROD_TOKEN)}
 
         setup_db(self.app, database_path=database_path)
 
@@ -122,7 +121,7 @@ class ApiTestCase(unittest.TestCase):
 
     def test_get_actors(self):
         res = self.client().get(
-            '/api/actors', headers={"Authorization": "Bearer {}".format(EXEC_PROD_TOKEN)})
+            '/api/actors', headers=self.headers)
 
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 200)

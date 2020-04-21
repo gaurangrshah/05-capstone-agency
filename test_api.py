@@ -53,7 +53,7 @@ class ApiTestCase(unittest.TestCase):
         self.asst_headers = {"Authorization": "Bearer {}".format(CAST_ASST_TOKEN)}
 
 
-        setup_db(self.app, database_path=prod_database_path)
+        setup_db(self.app, database_path=database_path)
 
         with self.app.app_context():
             self.db = db

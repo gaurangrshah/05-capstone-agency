@@ -9,10 +9,16 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
 SECRET_KEY = os.urandom(32)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-database_path = os.getenv('LOCAL_DATABASE_URL')
-test_database_path = os.getenv('TEST_DATABASE_PATH')
-prod_database_path = os.getenv('PROD_DATABASE_URL')
 
+if os.environ['ENV'] == 'dev':
+    database_path = os.getenv('LOCAL_DATABASE_URL')
+elif os.environ['ENV'] == 'prod':
+    database_path = os.getenv('PROD_DATABASE_URL')
+
+
+prod_database_path =
+
+print(os.environ['ENV'])
 
 db = SQLAlchemy()
 
@@ -31,7 +37,7 @@ def setup_db(app, database_path=database_path):
     app.config['DEBUG'] = DEBUG
     app.config['SECRET_KEY'] = SECRET_KEY
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
-    app.config['SQLALCHEMY_DATABASE_URI'] = prod_database_path
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_path
     print('using db: ', app.config['SQLALCHEMY_DATABASE_URI'])
     db.app = app
     db.init_app(app)

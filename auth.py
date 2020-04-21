@@ -10,23 +10,21 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-AUTH0_DOMAIN = 'gs-prod.auth0.com'
-AUTH0_ALGORITHMS = ['RS256']
-AUTH0_AUDIENCE = 'casting'
-# AUTH0_DOMAIN = os.environ['AUTH0_DOMAIN']
-# AUTH0_ALGORITHMS = os.environ['AUTH0_ALGORITHMS']
-# AUTH0_AUDIENCE = os.environ['AUTH0_AUDIENCE']
+# AUTH0_DOMAIN = 'gs-prod.auth0.com'
+# AUTH0_ALGORITHMS = ['RS256']
+# AUTH0_AUDIENCE = 'casting'
+AUTH0_DOMAIN = os.environ['AUTH0_DOMAIN']
+AUTH0_ALGORITHMS = os.environ['AUTH0_ALGORITHMS']
+AUTH0_AUDIENCE = os.environ['AUTH0_AUDIENCE']
 
 print('❌ os.environ', os.getenv('AUTH0_AUDIENCE'))
 
-# AuthError Exception
-'''
-AuthError Exception
-A standardized way to communicate auth failure modes
-'''
-
-
+# AuthError Exception handler
 class AuthError(Exception):
+    '''
+    AuthError Exception
+    A standardized way to communicate auth failure modes
+    '''
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
@@ -35,7 +33,7 @@ class AuthError(Exception):
 # Auth Header
 
 '''
-@TODO implement get_token_auth_header() method
+    get_token_auth_header() method
     it should attempt to get the header from the request
         it should raise an AuthError if no header is present
     it should attempt to split bearer and the token
@@ -86,7 +84,7 @@ def get_token_auth_header():
 
 
 '''
-@TODO implement verify_decode_jwt(token) method
+    verify_decode_jwt(token) method
     @INPUTS
         token: a json web token (string)
 
@@ -102,7 +100,6 @@ def get_token_auth_header():
 
 def verify_decode_jwt(token):
     """Uses the Auth0 secret to decode then verify the provided token"""
-    # auth0url = 'https://{}/.well-known/jwks.json'.format(AUTH0_DOMAIN)
     # print('verifying...')
     jsonurl = urlopen("https://{}/.well-known/jwks.json".format(AUTH0_DOMAIN))
     # print('jsonurl', jsonurl)
@@ -167,7 +164,7 @@ def verify_decode_jwt(token):
 
 
 '''
-@TODO implement check_permissions(permission, payload) method
+    check_permissions(permission, payload) method
     @INPUTS
         permission: string permission (i.e. 'post:drink')
         payload: decoded jwt payload
@@ -198,8 +195,8 @@ def check_permissions(permission, payload):
         }, 401)
     return True
 
-    '''
-@TODO implement @requires_auth(permission) decorator method
+'''
+    @requires_auth(permission) decorator method
     @INPUTS
         permission: string permission (i.e. 'post:drink')
 

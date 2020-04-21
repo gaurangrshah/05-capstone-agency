@@ -12,7 +12,8 @@ EXEC_PROD_TOKEN = os.environ['EXEC_PROD_TOKEN']
 CAST_DIR_TOKEN = os.environ['CAST_DIR_TOKEN']
 CAST_ASST_TOKEN = os.environ['CAST_ASST_TOKEN']
 
-database_path = os.environ['TEST_DATABASE_URL']
+
+prod_test_database_path = os.environ['PROD_TEST_DB_URL']
 
 class ApiTestCase(unittest.TestCase):
     """ Represents the api test case """
@@ -51,7 +52,7 @@ class ApiTestCase(unittest.TestCase):
         self.asst_headers = {"Authorization": "Bearer {}".format(CAST_ASST_TOKEN)}
 
 
-        setup_db(self.app, database_path=database_path)
+        setup_db(self.app, database_path=prod_test_database_path)
 
         with self.app.app_context():
             self.db = db

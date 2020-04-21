@@ -5,13 +5,12 @@ from flask_migrate import Migrate
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-
 DEBUG = True
 SECRET_KEY = os.urandom(32)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 database_path = os.getenv('DATABASE_URL')
 
-print(database_path)
+print('current_db:', database_path)
 
 db = SQLAlchemy()
 
@@ -22,11 +21,13 @@ setup_db(app)
 
 
 def db_drop_and_create_all():
+    """helper function used to drop current and create a fresh database"""
     db.drop_all()
     db.create_all()
 
 
 def setup_db(app, database_path=database_path):
+    """Configures primary application database"""
     app.config['DEBUG'] = DEBUG
     app.config['SECRET_KEY'] = SECRET_KEY
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
@@ -34,8 +35,7 @@ def setup_db(app, database_path=database_path):
     print('using db: ', app.config['SQLALCHEMY_DATABASE_URI'])
     db.app = app
     db.init_app(app)
-    # db.create_all()
-    # db_drop_and_create_all()
+
 
 
 cast = db.Table(

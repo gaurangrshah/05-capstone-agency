@@ -28,12 +28,11 @@ def create_app(test_config=None):
     def get_greeting():
         environment = os.environ['ENV']
         message = "Welcome to"
-        local_seed_url = ''
-        prod_seed_url = ''
+        seed_url = os.environ['seed_path']
         if environment == 'dev':
-            message = message + "the local development environment, " + "you can seed and re-seed the database, by navigating to: " + local_seed_url
+            message = message + "the local development environment, " + "you can seed and re-seed the database, by navigating to: " + seed_url
         elif environment == 'prod':
-            message = message + "the production app, " + "you can seed and re-seed the database, by navigating to: " + prod_seed_url
+            message = message + "the production app, " + "you can seed and re-seed the database, by navigating to: " + seed_url
         return message
 
     return app

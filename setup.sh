@@ -1,4 +1,6 @@
 #!/bin/sh
+
+export SEED_PATH='http://127.0.0.1/api/seed'
 export ENV='dev'
 export AUTH0_DOMAIN='gs-prod.auth0.com'
 export AUTH0_CLIENTID='gdvmdIVo1hD9elEssUgugh9XvsKc6FEG'

@@ -29,10 +29,11 @@ def create_app(test_config=None):
         environment = os.environ['ENV']
         message = "Welcome to"
         seed_url = os.environ['SEED_PATH']
+        seed_url_html = f'<a href="{seed_url}">clicking here</a>'
         if environment == 'dev':
-            message = message + "the local development environment, " + "you can seed and re-seed the database, by navigating to: " + seed_url
+            message = message + "the local development environment, " + "you can seed and re-seed the database, by " + seed_url_html
         elif environment == 'prod':
-            message = message + "the production app, " + "you can seed and re-seed the database, by navigating to: " + seed_url
+            message = message + "the production app, " + "you can seed and re-seed the database, by " + seed_url_html
         return message
 
     return app

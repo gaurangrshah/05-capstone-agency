@@ -114,18 +114,6 @@ export TEST_DATABASE_URL=<URI_TO_DATABASE>
 > ```
 >
 > **NOTE**: `TEST_DATABASE_URL` must be set locally. See[ `Setup Local Testing Database`](#setup-testing-database)
->
-> 
->
-> Run tests against production testing database:
->
-> ```shell
-> python test_prod_api.py
-> ```
->
-> **NOTE**: production testing database is already configured with the necessary environment variables 
-
-
 
 
 

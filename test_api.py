@@ -12,8 +12,11 @@ EXEC_PROD_TOKEN = os.environ['EXEC_PROD_TOKEN']
 CAST_DIR_TOKEN = os.environ['CAST_DIR_TOKEN']
 CAST_ASST_TOKEN = os.environ['CAST_ASST_TOKEN']
 
-prod_database_path = os.environ['PROD_DATABASE_URL']
-database_path = os.environ['TEST_DATABASE_URL']
+
+if os.environ['ENV'] == 'dev':
+    database_path = os.environ['TEST_DATABASE_URL']
+elif os.environ['ENV'] == 'prod':
+    database_path = os.environ['PROD_DATABASE_URL']
 
 
 class ApiTestCase(unittest.TestCase):

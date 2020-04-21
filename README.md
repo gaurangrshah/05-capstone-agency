@@ -176,13 +176,14 @@ source setup.sh
 
 ### All Available Endpoints:
 
-| Endpoint:            | Available Methods:     | Details:                                                     |
-| -------------------- | ---------------------- | ------------------------------------------------------------ |
-| `/`                  | `GET`                  | returns the application index route                          |
-| `/actors`            | [`GET, POST`]          | used to `GET` a `list` of all `actors` and `POST` new `actors` |
-| `/movies`            | [`GET, POST`]          | used to `GET` a `list` of all `movies` and `POST` new `movies` |
-| `/actors/<actor_id>` | [`GET, PATCH, DELETE`] | used to `GET` a single `actor` by `actor_id`, or `PATCH`  a single `actor` by `actor_id` or `DELETE` a single `actor` by `actor_id` |
-| `/movies/<movie_id>` | [`GET, PATCH, DELETE`] | used to `GET` a single `movie` by `movie_id`, or `PATCH`  a single `movie` by `movie_id` or `DELETE` a single `movie` by `movie_id` |
+| Endpoint:               | Available Methods:     | Details:                                                     |
+| ----------------------- | ---------------------- | ------------------------------------------------------------ |
+| `/`                     | `GET`                  | returns the application index route                          |
+| `/api/seed`             | `GET`                  | used to seed/re-seed the database with default records       |
+| `api/actors`            | [`GET, POST`]          | used to `GET` a `list` of all `actors` and `POST` new `actors` |
+| `api/movies`            | [`GET, POST`]          | used to `GET` a `list` of all `movies` and `POST` new `movies` |
+| `api/actors/<actor_id>` | [`GET, PATCH, DELETE`] | used to `GET` a single `actor` by `actor_id`, or `PATCH`  a single `actor` by `actor_id` or `DELETE` a single `actor` by `actor_id` |
+| `api/movies/<movie_id>` | [`GET, PATCH, DELETE`] | used to `GET` a single `movie` by `movie_id`, or `PATCH`  a single `movie` by `movie_id` or `DELETE` a single `movie` by `movie_id` |
 
 
 

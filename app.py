@@ -26,17 +26,15 @@ def create_app(test_config=None):
 
     @app.route('/')
     def get_greeting():
-        excited = os.environ['EXCITED']
-        greeting = "Hello"
-        if excited == 'true':
-            greeting = greeting + "!!!!!"
-        else:
-            greeting = greeting + "?????"
-        return greeting
-
-    @app.route('/coolkids')
-    def be_cool():
-        return "Be cool, man, be coooool! You're almost a FSND grad!"
+        environment = os.environ['ENV']
+        message = "Welcome to"
+        local_seed_url = ''
+        prod_seed_url = ''
+        if environment == 'dev':
+            message = message + "the local development environment, " + "you can seed and re-seed the database, by navigating to: " + local_seed_url
+        elif environment == 'prod':
+            message = message + "the production app, " + "you can seed and re-seed the database, by navigating to: " + prod_seed_url
+        return message
 
     return app
 

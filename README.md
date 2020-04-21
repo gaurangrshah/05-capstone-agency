@@ -65,15 +65,13 @@ pip install -r requirements.txt
 
 
 
-## Setup Databases
-
 ### Setup Primary Database
 
 ```shell
 createdb casting
 ```
 
-- Setup environment variable to hold primary database path:
+- Setup environment variable for primary local database path:
 
 ```shell
 export DATABASE_URL=<URI_TO_DATABASE> 
@@ -85,7 +83,7 @@ export DATABASE_URL=<URI_TO_DATABASE>
 >
 > This will generate the initial data needed for the application, and will reset the database if data has already been seeded. 
 >
-> **ALSO NOTE**: you do not need to be authenticated to trigger this endpoint
+> **NOTE**: you do not need to be authenticated to trigger this endpoint
 
 
 
@@ -95,25 +93,13 @@ export DATABASE_URL=<URI_TO_DATABASE>
 createdb casting_test
 ```
 
-- Setup environment variable to hold primary database path:
+- Setup environment variable for local test database path:
 
 ```shell
 export TEST_DATABASE_URL=<URI_TO_DATABASE> 
 ```
 
-> Any tests being run will get executed by default against this secondary database. And can be accessed by registered collaborators at: https://dashboard.heroku.com/apps/gs-sample-deploy/settings
-
-
-
-**Running Tests**
-
-> Run tests against local testing database:
->
-> ```shell
-> python test_api.py
-> ```
->
-> **NOTE**: `TEST_DATABASE_URL` must be set locally. See[ `Setup Local Testing Database`](#setup-testing-database)
+> Any tests being run will get executed by default against this secondary database. 
 
 
 
@@ -136,12 +122,12 @@ source setup.sh
 > - `CAST_DIR_TOKEN` - has limited access to most endpoints and functions
 > - `CAST_ASST_TOKEN` - has extremely limited access and only basic view functions for each endpoint
 >
-> Additional environment variables that **MUST BE SET** based on your local database configuration:
+> Additional environment variables that **MUST BE SET** based on your local app configuration:
 >
 > - `DATABASE_URL` - used to define your local database path
 > - `TEST_DATABASE_URL` - used to define your local test database path
 >
-> **NOTE:** The neccessary <u>database paths are already configured via Heroku's production environment</u>
+> **NOTE:**  <u>Production database paths are already configured via Heroku</u>
 >
 > 
 >
@@ -160,6 +146,18 @@ source setup.sh
 > # used to fire up the server:
 > flask run --reload
 > ```
+
+
+
+**Running Tests**
+
+> Run tests against local testing database:
+>
+> ```shell
+> python test_api.py
+> ```
+>
+> **NOTE**: `TEST_DATABASE_URL` must be set locally. See[ `Setup Local Testing Database`](#setup-testing-database)
 
 
 

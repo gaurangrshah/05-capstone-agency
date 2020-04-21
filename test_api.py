@@ -5,20 +5,13 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from models import db, setup_db, Actor, Movie
 from dotenv import load_dotenv
-# basedir = os.path.abspath(os.path.dirname(__file__))
-
+# https://www.nylas.com/blog/making-use-of-environment-variables-in-python/
 load_dotenv()
 
-TESTING = True
 EXEC_PROD_TOKEN = os.environ['EXEC_PROD_TOKEN']
-# generate testing tokens:
-# https://manage.auth0.com/dashboard/us/gs-prod/apis/management/explorer
-TESTING_TOKEN = os.environ['TESTING_TOKEN']
+CAST_DIR_TOKEN = os.environ['CAST_DIR_TOKEN']
 
 database_path = os.environ['TEST_DATABASE_URL']
-bearer = 'Bearer ' + EXEC_PROD_TOKEN
-# print(EXEC_PROD_TOKEN)
-# print(bearer)
 
 
 class ApiTestCase(unittest.TestCase):
@@ -44,12 +37,16 @@ class ApiTestCase(unittest.TestCase):
         self.db.session.commit()
         self.db.session.close()
 
+# ---------------------------------------------------------------------------------
+# ------------------------------ SETUP TESTS --------------------------------------
+# ---------------------------------------------------------------------------------
+
     def setUp(self):
         """ Configure test client with app & db """
         self.app = create_app()
 
         self.client = self.app.test_client
-        self.headers = {"Authorization": "Bearer {}".format(EXEC_PROD_TOKEN)}
+        self.prod_headers = {"Authorization": "Bearer {}".format(EXEC_PROD_TOKEN)}
 
         setup_db(self.app, database_path=database_path)
 
@@ -68,9 +65,9 @@ class ApiTestCase(unittest.TestCase):
         self.db.session.close()
         pass
 
-    def test_test(self):
-        """Test if tests are setup"""
-        self.assertEqual(True, True)
+# ---------------------------------------------------------------------------------
+# --------------------------------- TEST DB ---------------------------------------
+# ---------------------------------------------------------------------------------
 
     def test_seed_testdb(self):
         """Test Seed Data in Db"""
@@ -80,6 +77,10 @@ class ApiTestCase(unittest.TestCase):
         movies = Movie.query.all()  # check of movies is a list of Movies
         self.assertEqual(isinstance(movies, list), True)
         self.assertEqual(isinstance(movies[0], Movie), True)
+
+# ---------------------------------------------------------------------------------
+# ------------------------ UNAUTHENTICATED ACTORS ---------------------------------
+# ---------------------------------------------------------------------------------
 
     def test_get_actors_with_NO_HEADERS(self):
         res = self.client().get('/api/actors')
@@ -119,9 +120,13 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertEqual(body['error'], 'Authorization header is expected.')
 
+# ---------------------------------------------------------------------------------
+# ------------------------------- PRODUCER ACTORS ---------------------------------
+# ---------------------------------------------------------------------------------
+
     def test_get_actors(self):
         res = self.client().get(
-            '/api/actors', headers=self.headers)
+            '/api/actors', headers=self.prod_headers)
 
         body = json.loads(res.data)
         actors = body['actors']
@@ -130,7 +135,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(isinstance(actors, list), True)
 
     def test_post_actors(self):
-        res = self.client().post('/api/actors', headers=self.headers, json={
+        res = self.client().post('/api/actors', headers=self.prod_headers, json={
             'name': 'Tom Smith',
             'age': 34,
             'gender': 'm'
@@ -140,7 +145,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(body['success'], True)
 
     def test_patch_actors(self):
-        res = self.client().patch('/api/actors/2', headers=self.headers, json={
+        res = self.client().patch('/api/actors/2', headers=self.prod_headers, json={
             'name': 'Jane Smith',
             'age': 24,
             'gender': 'f'
@@ -152,19 +157,18 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(isinstance(actors, list), True)
 
     def test_get_actors(self):
-        res = self.client().get('/api/actors/2', headers=self.headers)
+        res = self.client().get('/api/actors/2', headers=self.prod_headers)
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['success'], True)
 
     def test_delete_actors(self):
-        res = self.client().delete('/api/actors/2', headers=self.headers)
+        res = self.client().delete('/api/actors/2', headers=self.prod_headers)
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['success'], True)
-
 # ---------------------------------------------------------------------------------
-# ---------------------------------- MOVIES ---------------------------------------
+# --------------------------- UNAUTHENTICATED MOVIES ------------------------------
 # ---------------------------------------------------------------------------------
 
     def test_get_movies_with_NO_HEADERS(self):
@@ -203,10 +207,13 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertEqual(body['error'], 'Authorization header is expected.')
 
+# ---------------------------------------------------------------------------------
+# ------------------------------- PRODUCER MOVIES ---------------------------------
+# ---------------------------------------------------------------------------------
 
     def test_get_movies(self):
         res = self.client().get(
-            '/api/movies', headers=self.headers)
+            '/api/movies', headers=self.prod_headers)
 
         body = json.loads(res.data)
         movies = body['movies']
@@ -215,7 +222,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(isinstance(movies, list), True)
 
     def test_post_movies(self):
-        res = self.client().post('/api/movies', headers=self.headers, json={
+        res = self.client().post('/api/movies', headers=self.prod_headers, json={
             'title': 'The Movie 4',
             'year': 2017
         })
@@ -224,7 +231,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(body['success'], True)
 
     def test_patch_movies(self):
-        res = self.client().patch('/api/movies/2', headers=self.headers, json={
+        res = self.client().patch('/api/movies/2', headers=self.prod_headers, json={
             'title': 'The Movie 4',
             'year': 2018
         })
@@ -235,13 +242,13 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(isinstance(movies, list), True)
 
     def test_get_movies(self):
-        res = self.client().get('/api/movies/2', headers=self.headers)
+        res = self.client().get('/api/movies/2', headers=self.prod_headers)
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['success'], True)
 
     def test_delete_movies(self):
-        res = self.client().delete('/api/movies/2', headers=self.headers)
+        res = self.client().delete('/api/movies/2', headers=self.prod_headers)
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['success'], True)

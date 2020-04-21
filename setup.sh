@@ -1,5 +1,5 @@
 #!/bin/sh
-
+export ENV='dev'
 export AUTH0_DOMAIN='gs-prod.auth0.com'
 export AUTH0_CLIENTID='gdvmdIVo1hD9elEssUgugh9XvsKc6FEG'
 export AUTH0_AUDIENCE='casting'

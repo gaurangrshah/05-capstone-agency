@@ -9,13 +9,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
 SECRET_KEY = os.urandom(32)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+database_path = os.getenv('DATABASE_URL')
 
-if os.environ['ENV'] == 'dev':
-    database_path = os.getenv('LOCAL_DATABASE_URL')
-elif os.environ['ENV'] == 'prod':
-    database_path = os.getenv('PROD_DATABASE_URL')
-
-print(os.environ['ENV'])
+print(database_path)
 
 db = SQLAlchemy()
 

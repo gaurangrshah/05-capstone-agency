@@ -72,133 +72,179 @@ class ApiTestCase(unittest.TestCase):
         """Test if tests are setup"""
         self.assertEqual(True, True)
 
-    # def test_seed_testdb(self):
-    #     """Test Seed Data in Db"""
-    #     actors = Actor.query.all()  # check of actors is a list of Actors
-    #     self.assertEqual(isinstance(actors, list), True)
-    #     self.assertEqual(isinstance(actors[0], Actor), True)
-    #     movies = Movie.query.all()  # check of movies is a list of Movies
-    #     self.assertEqual(isinstance(movies, list), True)
-    #     self.assertEqual(isinstance(movies[0], Movie), True)
+    def test_seed_testdb(self):
+        """Test Seed Data in Db"""
+        actors = Actor.query.all()  # check of actors is a list of Actors
+        self.assertEqual(isinstance(actors, list), True)
+        self.assertEqual(isinstance(actors[0], Actor), True)
+        movies = Movie.query.all()  # check of movies is a list of Movies
+        self.assertEqual(isinstance(movies, list), True)
+        self.assertEqual(isinstance(movies[0], Movie), True)
 
-    # def test_get_actors_with_NO_HEADERS(self):
-    #     res = self.client().get('/api/actors')
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_get_actors_with_NO_HEADERS(self):
+        res = self.client().get('/api/actors')
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
-    # def test_post_actors_with_NO_HEADERS(self):
-    #     res = self.client().post('/api/actors', json={
-    #         'name': 'Tom Smith',
-    #         'age': 34,
-    #         'gender': 'm'
-    #     })
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_post_actors_with_NO_HEADERS(self):
+        res = self.client().post('/api/actors', json={
+            'name': 'Tom Smith',
+            'age': 34,
+            'gender': 'm'
+        })
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
-    # def test_patch_actors_with_NO_HEADERS(self):
-    #     res = self.client().patch('/api/actors/4', json={
-    #         'name': 'Jane Smith',
-    #         'age': 24,
-    #         'gender': 'f'
-    #     })
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_patch_actors_with_NO_HEADERS(self):
+        res = self.client().patch('/api/actors/4', json={
+            'name': 'Jane Smith',
+            'age': 24,
+            'gender': 'f'
+        })
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
-    # def test_get_actors_with_NO_HEADERS(self):
-    #     res = self.client().get('/api/actors/4')
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_get_actors_with_NO_HEADERS(self):
+        res = self.client().get('/api/actors/4')
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
-    # def test_delete_actors_with_NO_HEADERS(self):
-    #     res = self.client().delete('/api/actors/4')
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_delete_actors_with_NO_HEADERS(self):
+        res = self.client().delete('/api/actors/4')
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
     def test_get_actors(self):
         res = self.client().get(
             '/api/actors', headers=self.headers)
 
         body = json.loads(res.data)
+        actors = body['actors']
         self.assertEqual(res.status_code, 200)
-        # self.assertEqual(body['error'], 'Authorization header is expected.')
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(actors, list), True)
 
-    # def test_post_actors(self):
-    #     res = self.client().post('/api/actors', headers=self.headers, json={
-    #         'name': 'Tom Smith',
-    #         'age': 34,
-    #         'gender': 'm'
-    #     })
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_post_actors(self):
+        res = self.client().post('/api/actors', headers=self.headers, json={
+            'name': 'Tom Smith',
+            'age': 34,
+            'gender': 'm'
+        })
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
 
-    # def test_patch_actors(self):
-    #     res = self.client().patch('/api/actors/4', headers=self.headers, json={
-    #         'name': 'Jane Smith',
-    #         'age': 24,
-    #         'gender': 'f'
-    #     })
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_patch_actors(self):
+        res = self.client().patch('/api/actors/2', headers=self.headers, json={
+            'name': 'Jane Smith',
+            'age': 24,
+            'gender': 'f'
+        })
+        body = json.loads(res.data)
+        actors = body['actors']
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(actors, list), True)
 
-    # def test_get_actors(self):
-    #     res = self.client().get('/api/actors/4', headers=self.headers)
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_get_actors(self):
+        res = self.client().get('/api/actors/2', headers=self.headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
 
-    # def test_delete_actors(self):
-    #     res = self.client().delete('/api/actors/4', headers=self.headers)
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_delete_actors(self):
+        res = self.client().delete('/api/actors/2', headers=self.headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
 
 # ---------------------------------------------------------------------------------
 # ---------------------------------- MOVIES ---------------------------------------
 # ---------------------------------------------------------------------------------
 
-    # def test_get_movies_with_NO_HEADERS(self):
-    #     res = self.client().get('/api/movies')
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_get_movies_with_NO_HEADERS(self):
+        res = self.client().get('/api/movies')
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
-    # def test_post_movies_with_NO_HEADERS(self):
-    #     res = self.client().post('/api/movies', json={
-    #         'title': 'The Movie 4',
-    #         'year': 2017
-    #     })
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_post_movies_with_NO_HEADERS(self):
+        res = self.client().post('/api/movies', json={
+            'title': 'The Movie 4',
+            'year': 2017
+        })
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
-    # def test_patch_movies_with_NO_HEADERS(self):
-    #     res = self.client().patch('/api/movies/4', json={
-    #         'title': 'The Movie 4',
-    #         'year': 2018
-    #     })
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_patch_movies_with_NO_HEADERS(self):
+        res = self.client().patch('/api/movies/4', json={
+            'title': 'The Movie 4',
+            'year': 2018
+        })
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
-    # def test_get_movies_with_NO_HEADERS(self):
-    #     res = self.client().get('/api/movies/4')
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_get_movies_with_NO_HEADERS(self):
+        res = self.client().get('/api/movies/4')
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
-    # def test_delete_movies_with_NO_HEADERS(self):
-    #     res = self.client().delete('/api/movies/4')
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['error'], 'Authorization header is expected.')
+    def test_delete_movies_with_NO_HEADERS(self):
+        res = self.client().delete('/api/movies/4')
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['error'], 'Authorization header is expected.')
 
+
+    def test_get_movies(self):
+        res = self.client().get(
+            '/api/movies', headers=self.headers)
+
+        body = json.loads(res.data)
+        movies = body['movies']
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(movies, list), True)
+
+    def test_post_movies(self):
+        res = self.client().post('/api/movies', headers=self.headers, json={
+            'title': 'The Movie 4',
+            'year': 2017
+        })
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_patch_movies(self):
+        res = self.client().patch('/api/movies/2', headers=self.headers, json={
+            'title': 'The Movie 4',
+            'year': 2018
+        })
+        body = json.loads(res.data)
+        movies = body['movies']
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(movies, list), True)
+
+    def test_get_movies(self):
+        res = self.client().get('/api/movies/2', headers=self.headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_delete_movies(self):
+        res = self.client().delete('/api/movies/2', headers=self.headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
 
 if __name__ == '__main__':
     unittest.main()

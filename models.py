@@ -15,9 +15,6 @@ if os.environ['ENV'] == 'dev':
 elif os.environ['ENV'] == 'prod':
     database_path = os.getenv('PROD_DATABASE_URL')
 
-
-prod_database_path =
-
 print(os.environ['ENV'])
 
 db = SQLAlchemy()
@@ -60,7 +57,7 @@ class Actor(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String)
     age = db.Column(db.Integer)
-    gender = db.Column(db.String)  # 🚧 create ENUM
+    gender = db.Column(db.String)
 
     def __init__(self, name, age, gender):
         self.name = name

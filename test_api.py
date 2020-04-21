@@ -10,6 +10,7 @@ load_dotenv()
 
 EXEC_PROD_TOKEN = os.environ['EXEC_PROD_TOKEN']
 CAST_DIR_TOKEN = os.environ['CAST_DIR_TOKEN']
+CAST_ASST_TOKEN = os.environ['CAST_ASST_TOKEN']
 
 database_path = os.environ['TEST_DATABASE_URL']
 
@@ -47,6 +48,9 @@ class ApiTestCase(unittest.TestCase):
 
         self.client = self.app.test_client
         self.prod_headers = {"Authorization": "Bearer {}".format(EXEC_PROD_TOKEN)}
+        self.dir_headers = {"Authorization": "Bearer {}".format(CAST_DIR_TOKEN)}
+        self.asst_headers = {"Authorization": "Bearer {}".format(CAST_ASST_TOKEN)}
+
 
         setup_db(self.app, database_path=database_path)
 
@@ -120,6 +124,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertEqual(body['error'], 'Authorization header is expected.')
 
+
 # ---------------------------------------------------------------------------------
 # ------------------------------- PRODUCER ACTORS ---------------------------------
 # ---------------------------------------------------------------------------------
@@ -167,6 +172,104 @@ class ApiTestCase(unittest.TestCase):
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['success'], True)
+
+# ---------------------------------------------------------------------------------
+# ------------------------------- DIRECTOR ACTORS ---------------------------------
+# ---------------------------------------------------------------------------------
+
+    def test_get_actors(self):
+        res = self.client().get(
+            '/api/actors', headers=self.dir_headers)
+
+        body = json.loads(res.data)
+        actors = body['actors']
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(actors, list), True)
+
+    def test_post_actors(self):
+        res = self.client().post('/api/actors', headers=self.dir_headers, json={
+            'name': 'Tom Smith',
+            'age': 34,
+            'gender': 'm'
+        })
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_patch_actors(self):
+        res = self.client().patch('/api/actors/2', headers=self.dir_headers, json={
+            'name': 'Jane Smith',
+            'age': 24,
+            'gender': 'f'
+        })
+        body = json.loads(res.data)
+        actors = body['actors']
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(actors, list), True)
+
+    def test_get_actors(self):
+        res = self.client().get('/api/actors/2', headers=self.dir_headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_delete_actors(self):
+        res = self.client().delete('/api/actors/2', headers=self.dir_headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+
+
+# ---------------------------------------------------------------------------------
+# ------------------------------ ASSISTANT ACTORS ---------------------------------
+# ---------------------------------------------------------------------------------
+
+    def test_get_actors(self):
+        res = self.client().get(
+            '/api/actors', headers=self.asst_headers)
+
+        body = json.loads(res.data)
+        actors = body['actors']
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(actors, list), True)
+
+    def test_post_actors(self):
+        """ FAILS: 401 - UNAUTHORIZED """
+        res = self.client().post('/api/actors', headers=self.asst_headers, json={
+            'name': 'Tom Smith',
+            'age': 34,
+            'gender': 'm'
+        })
+
+        self.assertEqual(res.status_code, 401)
+
+    def test_patch_actors(self):
+        """ FAILS: 401 - UNAUTHORIZED """
+        res = self.client().patch('/api/actors/2', headers=self.asst_headers, json={
+            'name': 'Jane Smith',
+            'age': 24,
+            'gender': 'f'
+        })
+
+        self.assertEqual(res.status_code, 401)
+
+    def test_get_actors(self):
+        res = self.client().get('/api/actors/2', headers=self.asst_headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_delete_actors(self):
+        """ FAILS: 401 - UNAUTHORIZED """
+        res = self.client().delete('/api/actors/2', headers=self.asst_headers)
+
+        self.assertEqual(res.status_code, 401)
+
+
 # ---------------------------------------------------------------------------------
 # --------------------------- UNAUTHENTICATED MOVIES ------------------------------
 # ---------------------------------------------------------------------------------
@@ -252,6 +355,97 @@ class ApiTestCase(unittest.TestCase):
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['success'], True)
+
+# ---------------------------------------------------------------------------------
+# ------------------------------- DIRECTOR MOVIES ---------------------------------
+# ---------------------------------------------------------------------------------
+
+    def test_get_movies(self):
+        res = self.client().get(
+            '/api/movies', headers=self.dir_headers)
+
+        body = json.loads(res.data)
+        movies = body['movies']
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(movies, list), True)
+
+    def test_post_movies(self):
+        """ FAILS: 401 - UNAUTHORIZED """
+        res = self.client().post('/api/movies', headers=self.dir_headers, json={
+            'title': 'The Movie 4',
+            'year': 2017
+        })
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+
+    def test_patch_movies(self):
+        res = self.client().patch('/api/movies/2', headers=self.dir_headers, json={
+            'title': 'The Movie 4',
+            'year': 2018
+        })
+        body = json.loads(res.data)
+        movies = body['movies']
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(movies, list), True)
+
+    def test_get_movies(self):
+        res = self.client().get('/api/movies/2', headers=self.dir_headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_delete_movies(self):
+        """ FAILS: 401 - UNAUTHORIZED """
+        res = self.client().delete('/api/movies/2', headers=self.dir_headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+
+# ---------------------------------------------------------------------------------
+# ------------------------------ ASSISTANT MOVIES ---------------------------------
+# ---------------------------------------------------------------------------------
+
+    def test_get_movies(self):
+        res = self.client().get(
+            '/api/movies', headers=self.asst_headers)
+
+        body = json.loads(res.data)
+        movies = body['movies']
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        self.assertEqual(isinstance(movies, list), True)
+
+    def test_post_movies(self):
+        """ FAILS: 401 - UNAUTHORIZED """
+        res = self.client().post('/api/movies', headers=self.asst_headers, json={
+            'title': 'The Movie 4',
+            'year': 2017
+        })
+
+        self.assertEqual(res.status_code, 401)
+
+    def test_patch_movies(self):
+        """ FAILS: 401 - UNAUTHORIZED """
+        res = self.client().patch('/api/movies/2', headers=self.asst_headers, json={
+            'title': 'The Movie 4',
+            'year': 2018
+        })
+
+        self.assertEqual(res.status_code, 401)
+
+    def test_get_movies(self):
+        res = self.client().get('/api/movies/2', headers=self.asst_headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_delete_movies(self):
+        """ FAILS: 401 - UNAUTHORIZED """
+        res = self.client().delete('/api/movies/2', headers=self.asst_headers)
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
 
 if __name__ == '__main__':
     unittest.main()

@@ -9,7 +9,7 @@ casting_blueprint = Blueprint('gsprod-api', __name__)
 # ROUTES
 '''
     GET /movies | GET /actors
-        it should be a public endpoint
+        it should be a authorized endpoint for avialable to all roles except 'public'
         it should contain only the item's data representation
     returns status code 200 and json {"success": True, "item": items} where items is the list of movies or actors
         or appropriate status code indicating reason for failure
